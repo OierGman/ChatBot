@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Google.Apis.Analytics.v3" Version="1.57.0.1679" />
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.57.0.2827" />
+    <PackageReference Include="System.Speech" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

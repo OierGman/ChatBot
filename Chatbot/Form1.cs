@@ -2,8 +2,6 @@ namespace Chatbot
 {
     public partial class Form1 : Form
     {
-        private int _messageNumber = 2;
-
         public Form1()
         {
             InitializeComponent();
@@ -28,7 +26,32 @@ namespace Chatbot
             };
             userInputBox.Text = "";
             ChatLogController(message);
-            ChatBotEngine.BankHolidays();
+
+            ChatApiDecider(message.Text);
+
+            //ChatBotEngine.BankHolidays().Wait();
+
+        }
+
+        private void ChatApiDecider(string messageText)
+        {
+            if(messageText.Contains("play"))
+            {
+                string keyWord = messageText.Remove(0,5);
+                YouTubeAPI(keyWord);
+            }
+        }
+
+        public static void YouTubeAPI(string keyWord)
+        {
+            try
+            {
+                new ChatBotEngine().YouTubeMusic(keyWord).Wait();
+            }
+            catch (AggregateException ex)
+            {
+                
+            }
         }
 
         private void ChatLogController(TextBox message)

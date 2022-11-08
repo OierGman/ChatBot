@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -11,6 +12,7 @@ namespace Chatbot
 {
     internal class ChatBotEngine
     {
+        [STAThread]
         public static async Task BankHolidays()
         {
             HttpClient client = new HttpClient();
@@ -20,7 +22,7 @@ namespace Chatbot
 
             APIObjects.BankHolidays.Root myDeserializedClass = JsonSerializer.Deserialize<APIObjects.BankHolidays.Root>(responseBody);
         }
-        private async Task YouTubeMusic(string keyWord)
+        public async Task YouTubeMusic(string keyWord)
         {
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -48,6 +50,8 @@ namespace Chatbot
                         break;
                 }
             }
+            Process.Start(new ProcessStartInfo("https://www.youtube.com/watch?v="+videos[0]) { UseShellExecute = true });
+
         }
     }
 }

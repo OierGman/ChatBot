@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Web;
 using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 
@@ -46,8 +47,10 @@ namespace Chatbot
         public static async Task MrChat(string s)
         {
             // oier wolfram API-Header // 2GVUAG-JERAUGG5QG //
+            APIObjects.MrChat.chat.Clear();
+
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync("http://api.wolframalpha.com/v1/conversation.jsp?appid=2GVUAG-JERAUGG5QG&i=" + s);
+            HttpResponseMessage response = await client.GetAsync("http://api.wolframalpha.com/v1/conversation.jsp?appid=2GVUAG-JERAUGG5QG&input=" + HttpUtility.UrlEncode(s));
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
@@ -55,6 +58,7 @@ namespace Chatbot
 
             APIObjects.MrChat.chat.Add(chatDeserializedClass);
         }
+
         public async Task YouTubeMusic(string keyWord)
         {
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()

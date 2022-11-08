@@ -15,7 +15,7 @@ namespace Chatbot
             }, 0, 3);
         }
         // user message button click event
-        private void messageButton_Click(object sender, EventArgs e)
+        private async void messageButton_Click(object sender, EventArgs e)
         {
             TextBox message = new TextBox()
             {
@@ -25,10 +25,13 @@ namespace Chatbot
                 Text = userInputBox.Text,
             };
             userInputBox.Text = "";
-            ChatLogController(message);
+            ChatLogController(message, 1);
             ChatDecider(message.Text);
-            ChatBotEngine.BankHolidays();
-            ChatBotEngine.Joke();
+            // ChatBotEngine.BankHolidays();
+            // ChatBotEngine.Joke();
+            await ChatBotEngine.MrChat(message.Text);
+
+            await BotResponse();
         }
 
         private void ChatDecider(string messageText)
@@ -38,6 +41,35 @@ namespace Chatbot
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
             }
+            else if (messageText.Contains("bank holiday"))
+            {
+                ChatBotEngine.BankHolidays();
+
+                TextBox message1 = new TextBox()
+                {
+                    ReadOnly = true,
+                    Dock = DockStyle.Fill,
+                    Multiline = true,
+                };
+
+                message1.Text = APIObjects.MrChat.chat[0].result;
+
+                ChatLogController(message1, 0);
+            }
+        }
+
+        public async Task BotResponse()
+        {
+            TextBox message1 = new TextBox()
+            {
+                ReadOnly = true,
+                Dock = DockStyle.Fill,
+                Multiline = true,
+            };
+
+            message1.Text = APIObjects.MrChat.chat[0].result;
+
+            ChatLogController(message1, 0);
         }
 
         public static void YouTubeAPI(string keyWord)
@@ -52,7 +84,7 @@ namespace Chatbot
             }
         }
 
-        private void ChatLogController(TextBox message)
+        private void ChatLogController(TextBox message, int i)
         {
             var botMessageOne = chatLogTable.GetControlFromPosition(0, 3);
             var botMessageTwo = chatLogTable.GetControlFromPosition(0, 2);
@@ -115,7 +147,7 @@ namespace Chatbot
 
             }
 
-            chatLogTable.Controls.Add(message, 1, 3);
+            chatLogTable.Controls.Add(message, i, 3);
         }
 
         private void userInputBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -132,7 +164,7 @@ namespace Chatbot
                 Text = userInputBox.Text,
             };
             userInputBox.Text = "";
-            ChatLogController(message);
+            ChatLogController(message, 1);
         }
     }
 }

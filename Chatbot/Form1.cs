@@ -26,21 +26,8 @@ namespace Chatbot
             };
             userInputBox.Text = "";
             ChatLogController(message);
-
-            ChatApiDecider(message.Text);
-
-            //ChatBotEngine.BankHolidays().Wait();
-
-        }
-
-        private void ChatApiDecider(string messageText)
-        {
-            if(messageText.Contains("play"))
-            {
-                string keyWord = messageText.Remove(0,5);
-                YouTubeAPI(keyWord);
+            ChatBotEngine.BankHolidays();
             ChatBotEngine.Joke();
-            }
         }
 
         public static void YouTubeAPI(string keyWord)

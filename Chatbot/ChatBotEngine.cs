@@ -27,6 +27,16 @@ namespace Chatbot
             }
         }
 
+        public static async Task Joke()
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://v2.jokeapi.dev/joke/Christmas");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
 
+            APIObjects.Jokes.Root jokeDeserializedClass = JsonSerializer.Deserialize<APIObjects.Jokes.Root>(responseBody);
+
+            APIObjects.Jokes.joke.Add(jokeDeserializedClass);
+        }
     }
 }

@@ -16,7 +16,17 @@ namespace Chatbot
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            APIObjects.BankHolidays.Root myDeserializedClass = JsonSerializer.Deserialize<APIObjects.BankHolidays.Root>(responseBody);
+            APIObjects.BankHolidays.Root bankHolDeserializedClass = JsonSerializer.Deserialize<APIObjects.BankHolidays.Root>(responseBody);
+
+            foreach (var x in bankHolDeserializedClass.EnglandAndWales.events)
+            {
+                if (DateTime.Parse(x.date) > DateTime.Now)
+                {
+                    APIObjects.BankHolidays.bankHolidays.Add(x);
+                }
+            }
         }
+
+
     }
 }

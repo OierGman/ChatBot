@@ -39,6 +39,7 @@ namespace Chatbot
             {
                 string keyWord = messageText.Remove(0,5);
                 YouTubeAPI(keyWord);
+            ChatBotEngine.Joke();
             }
         }
 

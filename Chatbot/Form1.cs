@@ -46,7 +46,7 @@ namespace Chatbot
         {
             try
             {
-                new ChatBotEngine().YouTubeMusic(keyWord).Wait();
+                new ChatBotEngine().YouTubeMusic(keyWord);
             }
             catch (AggregateException ex)
             {

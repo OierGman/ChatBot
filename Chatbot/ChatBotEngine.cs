@@ -50,8 +50,7 @@ namespace Chatbot
                         break;
                 }
             }
-            Process.Start(new ProcessStartInfo("https://www.youtube.com/watch?v="+videos[0]) { UseShellExecute = true });
-
+            Process.Start(new ProcessStartInfo("https://www.youtube.com/watch?v=" + searchListResponse.Items[0].Id.VideoId) { UseShellExecute = true });
         }
     }
 }

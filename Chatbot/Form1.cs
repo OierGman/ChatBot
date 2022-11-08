@@ -26,8 +26,18 @@ namespace Chatbot
             };
             userInputBox.Text = "";
             ChatLogController(message);
+            ChatDecider(message.Text);
             ChatBotEngine.BankHolidays();
             ChatBotEngine.Joke();
+        }
+
+        private void ChatDecider(string messageText)
+        {
+            if (messageText.Contains("play"))
+            {
+                string keyWord = messageText.Remove(0, 5);
+                YouTubeAPI(keyWord);
+            }
         }
 
         public static void YouTubeAPI(string keyWord)

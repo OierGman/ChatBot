@@ -28,6 +28,7 @@ namespace Chatbot
             };
             userInputBox.Text = "";
             ChatLogController(message);
+            ChatBotEngine.BankHolidays();
         }
 
         private void ChatLogController(TextBox message)

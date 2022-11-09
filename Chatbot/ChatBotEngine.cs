@@ -1,6 +1,5 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
-using Google.Cloud.Speech.V1;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Web;

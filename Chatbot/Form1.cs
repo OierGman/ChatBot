@@ -30,13 +30,9 @@ namespace Chatbot
             waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
             bwp = new BufferedWaveProvider(waveIn.WaveFormat);
             bwp.DiscardOnBufferOverflow = true;
-
-            btnRecordVoice.Enabled = true;
-            btnSave.Enabled = false;
-            btnSpeechInfo.Enabled = false;
         }
         // user message button click event
-        private async void messageButton_Click(object sender, EventArgs e)
+        private void messageButton_Click(object sender, EventArgs e)
         {
             TextBox message = new TextBox()
             {
@@ -50,15 +46,19 @@ namespace Chatbot
             ChatDecider(message.Text);
             // ChatBotEngine.BankHolidays();
             // ChatBotEngine.Joke();
-            await ChatBotEngine.MrChat(message.Text);
         }
 
-        private void ChatDecider(string messageText)
+        private async void ChatDecider(string messageText)
         {
             if (messageText.Contains("play") | messageText.Contains("Play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
+            }
+            else
+            {
+                await ChatBotEngine.MrChat(messageText);
+                BotResponse(null);
             }
         }
 
@@ -86,12 +86,12 @@ namespace Chatbot
         {
             try
             {
-                string test = await new ChatBotEngine().YouTubeMusic(keyWord);
-                BotResponse(test);
+                string title = await new ChatBotEngine().YouTubeMusic(keyWord);
+                BotResponse("Ok! I have found the most appropriate to your request! " + title);
             }
             catch (AggregateException ex)
             {
-                BotResponse("Sorry I couldn't find that");
+                BotResponse("Sorry I couldn't find anything for your request!");
             }
         }
 
@@ -161,6 +161,7 @@ namespace Chatbot
             chatLogTable.Controls.Add(message, i, 3);
         }
 
+        /* UNUSED on keypress event
         private void userInputBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar != (char)Keys.Enter) // guard statement to return early
@@ -177,7 +178,9 @@ namespace Chatbot
             userInputBox.Text = "";
             ChatLogController(message, 1);
         }
+        */
 
+        /*
         private void btnRecordVoice_Click(object sender, EventArgs e)
         {
             if (NAudio.Wave.WaveIn.DeviceCount < 1)
@@ -221,26 +224,7 @@ namespace Chatbot
             waveIn = null;
             writer.Close();
             writer = null;
-
-            reader = new WaveFileReader("audio.raw"); // (new MemoryStream(bytes));
-            waveOut.Init(reader);
-            waveOut.PlaybackStopped += new EventHandler<StoppedEventArgs>(waveOut_PlaybackStopped);
-            waveOut.Play();
-
-
         }
-        void waveIn_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
-
-        }
-        private void waveOut_PlaybackStopped(object sender, StoppedEventArgs e)
-        {
-            waveOut.Stop();
-            reader.Close();
-            reader = null;
-        }
-
         private void btnSpeechInfo_Click(object sender, EventArgs e)
         {
 
@@ -274,10 +258,8 @@ namespace Chatbot
                         userInputBox.Text = userInputBox.Text + " " + alternative.Transcript;
                     }
                 }
-
                 if (userInputBox.Text.Length == 0)
                     userInputBox.Text = "No Data ";
-
             }
             else
             {
@@ -285,23 +267,83 @@ namespace Chatbot
                 userInputBox.Text = "Audio File Missing ";
 
             }
-
+        }
+        */
+        void waveIn_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
 
         }
 
-        private void btnPlayAudio_Click(object sender, EventArgs e)
+        private void btnRecordVoice_MouseDown(object sender, MouseEventArgs e)
         {
+            if (NAudio.Wave.WaveIn.DeviceCount < 1)
+            {
+                Console.WriteLine("No microphone!");
+                return;
+            }
+            waveIn.StartRecording();
+        }
+
+        private void btnRecordVoice_MouseUp(object sender, MouseEventArgs e)
+        {
+            waveIn.StopRecording();
+
+            if (File.Exists("audio.raw"))
+                File.Delete("audio.raw");
+
+            writer = new WaveFileWriter(output, waveIn.WaveFormat);
+
+            byte[] buffer = new byte[bwp.BufferLength];
+            int offset = 0;
+            int count = bwp.BufferLength;
+
+            var read = bwp.Read(buffer, offset, count);
+            if (count > 0)
+            {
+                writer.Write(buffer, offset, read);
+            }
+
+            waveIn.Dispose();
+            waveIn = null;
+            writer.Close();
+            writer = null;
+
             if (File.Exists("audio.raw"))
             {
-                reader = new WaveFileReader("audio.raw");
-                waveOut.Init(reader);
-                waveOut.Play();
+                string fileName = "core-spring-367614-171243f0ad13.json";
+                string workingDirectory = Environment.CurrentDirectory;
+                string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+                string path = Path.Combine(projectDirectory, fileName);
+                string credential_path = path;
+                System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
+                var speech = SpeechClient.Create();
+                var response = speech.Recognize(new RecognitionConfig()
+                {
+                    Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
+                    SampleRateHertz = 16000,
+                    LanguageCode = "en",
+                }, RecognitionAudio.FromFile("audio.raw"));
+
+
+                userInputBox.Text = "";
+
+                foreach (var result in response.Results)
+                {
+                    foreach (var alternative in result.Alternatives)
+                    {
+                        userInputBox.Text = userInputBox.Text + " " + alternative.Transcript;
+                    }
+                }
+                if (userInputBox.Text.Length == 0)
+                    userInputBox.Text = "No Data ";
             }
             else
             {
-                MessageBox.Show("No Audio File Found");
+                userInputBox.Text = "Audio File Missing ";
             }
-        }
 
+            messageButton_Click(this, e);
+        }
     }
 }

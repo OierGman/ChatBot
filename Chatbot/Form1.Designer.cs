@@ -33,9 +33,6 @@
             this.messageButton = new System.Windows.Forms.Button();
             this.chatLogTable = new System.Windows.Forms.TableLayoutPanel();
             this.btnRecordVoice = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.btnSpeechInfo = new System.Windows.Forms.Button();
-            this.btnPlayAudio = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // userInputBox
@@ -44,10 +41,9 @@
             this.userInputBox.Location = new System.Drawing.Point(12, 456);
             this.userInputBox.Multiline = true;
             this.userInputBox.Name = "userInputBox";
-            this.userInputBox.Size = new System.Drawing.Size(420, 132);
+            this.userInputBox.Size = new System.Drawing.Size(320, 132);
             this.userInputBox.TabIndex = 1;
             this.userInputBox.Text = "Say something";
-            this.userInputBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.userInputBox_KeyPress);
             // 
             // messageButton
             // 
@@ -78,41 +74,12 @@
             // 
             this.btnRecordVoice.Location = new System.Drawing.Point(338, 456);
             this.btnRecordVoice.Name = "btnRecordVoice";
-            this.btnRecordVoice.Size = new System.Drawing.Size(94, 29);
+            this.btnRecordVoice.Size = new System.Drawing.Size(94, 132);
             this.btnRecordVoice.TabIndex = 4;
-            this.btnRecordVoice.Text = "Record";
+            this.btnRecordVoice.Text = "Voice";
             this.btnRecordVoice.UseVisualStyleBackColor = true;
-            this.btnRecordVoice.Click += new System.EventHandler(this.btnRecordVoice_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(338, 491);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(94, 29);
-            this.btnSave.TabIndex = 5;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnSpeechInfo
-            // 
-            this.btnSpeechInfo.Location = new System.Drawing.Point(338, 526);
-            this.btnSpeechInfo.Name = "btnSpeechInfo";
-            this.btnSpeechInfo.Size = new System.Drawing.Size(94, 29);
-            this.btnSpeechInfo.TabIndex = 6;
-            this.btnSpeechInfo.Text = "API";
-            this.btnSpeechInfo.UseVisualStyleBackColor = true;
-            this.btnSpeechInfo.Click += new System.EventHandler(this.btnSpeechInfo_Click);
-            // 
-            // btnPlayAudio
-            // 
-            this.btnPlayAudio.Location = new System.Drawing.Point(238, 456);
-            this.btnPlayAudio.Name = "btnPlayAudio";
-            this.btnPlayAudio.Size = new System.Drawing.Size(94, 29);
-            this.btnPlayAudio.TabIndex = 7;
-            this.btnPlayAudio.Text = "Play Audio";
-            this.btnPlayAudio.UseVisualStyleBackColor = true;
-            this.btnPlayAudio.Click += new System.EventHandler(this.btnPlayAudio_Click);
+            this.btnRecordVoice.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnRecordVoice_MouseDown);
+            this.btnRecordVoice.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnRecordVoice_MouseUp);
             // 
             // Form1
             // 
@@ -122,9 +89,6 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(549, 600);
-            this.Controls.Add(this.btnPlayAudio);
-            this.Controls.Add(this.btnSpeechInfo);
-            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnRecordVoice);
             this.Controls.Add(this.chatLogTable);
             this.Controls.Add(this.messageButton);
@@ -147,8 +111,5 @@
         private Button messageButton;
         private TableLayoutPanel chatLogTable;
         private Button btnRecordVoice;
-        private Button btnSave;
-        private Button btnSpeechInfo;
-        private Button btnPlayAudio;
     }
 }

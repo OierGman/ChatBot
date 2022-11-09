@@ -33,6 +33,8 @@
             this.messageButton = new System.Windows.Forms.Button();
             this.chatLogTable = new System.Windows.Forms.TableLayoutPanel();
             this.btnRecordVoice = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // userInputBox
@@ -60,14 +62,14 @@
             this.chatLogTable.ColumnCount = 2;
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.chatLogTable.Location = new System.Drawing.Point(12, 12);
+            this.chatLogTable.Location = new System.Drawing.Point(12, 37);
             this.chatLogTable.Name = "chatLogTable";
             this.chatLogTable.RowCount = 4;
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.chatLogTable.Size = new System.Drawing.Size(525, 438);
+            this.chatLogTable.Size = new System.Drawing.Size(525, 413);
             this.chatLogTable.TabIndex = 3;
             // 
             // btnRecordVoice
@@ -81,6 +83,24 @@
             this.btnRecordVoice.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btnRecordVoice_MouseDown);
             this.btnRecordVoice.MouseUp += new System.Windows.Forms.MouseEventHandler(this.btnRecordVoice_MouseUp);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 20);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Mr Chatty";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(504, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(33, 20);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "You";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -89,6 +109,8 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(549, 600);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRecordVoice);
             this.Controls.Add(this.chatLogTable);
             this.Controls.Add(this.messageButton);
@@ -111,5 +133,7 @@
         private Button messageButton;
         private TableLayoutPanel chatLogTable;
         private Button btnRecordVoice;
+        private Label label1;
+        private Label label2;
     }
 }

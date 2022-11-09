@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Web;
-using Google.Apis.Services;
+﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using Google.Cloud.Speech.V1;
+using System.Diagnostics;
+using System.Text.Json;
+using System.Web;
 
 namespace Chatbot
 {
@@ -59,7 +55,7 @@ namespace Chatbot
             APIObjects.MrChat.chat.Add(chatDeserializedClass);
         }
 
-        public async Task YouTubeMusic(string keyWord)
+        public async Task<string> YouTubeMusic(string keyWord)
         {
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()
             {
@@ -87,7 +83,13 @@ namespace Chatbot
                         break;
                 }
             }
-            Process.Start(new ProcessStartInfo("https://www.youtube.com/watch?v=" + searchListResponse.Items[0].Id.VideoId) { UseShellExecute = true });
+
+            using Process myProcess =
+                Process.Start(
+                    new ProcessStartInfo("https://www.youtube.com/watch?v=" + searchListResponse.Items[0].Id.VideoId)
+                    { UseShellExecute = true });
+            string responseTitle = searchListResponse.Items[0].Snippet.Title;
+            return responseTitle;
         }
     }
 }

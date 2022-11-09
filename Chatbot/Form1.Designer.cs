@@ -32,6 +32,10 @@
             this.userInputBox = new System.Windows.Forms.TextBox();
             this.messageButton = new System.Windows.Forms.Button();
             this.chatLogTable = new System.Windows.Forms.TableLayoutPanel();
+            this.btnRecordVoice = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnSpeechInfo = new System.Windows.Forms.Button();
+            this.btnPlayAudio = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // userInputBox
@@ -70,6 +74,46 @@
             this.chatLogTable.Size = new System.Drawing.Size(525, 438);
             this.chatLogTable.TabIndex = 3;
             // 
+            // btnRecordVoice
+            // 
+            this.btnRecordVoice.Location = new System.Drawing.Point(338, 456);
+            this.btnRecordVoice.Name = "btnRecordVoice";
+            this.btnRecordVoice.Size = new System.Drawing.Size(94, 29);
+            this.btnRecordVoice.TabIndex = 4;
+            this.btnRecordVoice.Text = "Record";
+            this.btnRecordVoice.UseVisualStyleBackColor = true;
+            this.btnRecordVoice.Click += new System.EventHandler(this.btnRecordVoice_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(338, 491);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(94, 29);
+            this.btnSave.TabIndex = 5;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnSpeechInfo
+            // 
+            this.btnSpeechInfo.Location = new System.Drawing.Point(338, 526);
+            this.btnSpeechInfo.Name = "btnSpeechInfo";
+            this.btnSpeechInfo.Size = new System.Drawing.Size(94, 29);
+            this.btnSpeechInfo.TabIndex = 6;
+            this.btnSpeechInfo.Text = "API";
+            this.btnSpeechInfo.UseVisualStyleBackColor = true;
+            this.btnSpeechInfo.Click += new System.EventHandler(this.btnSpeechInfo_Click);
+            // 
+            // btnPlayAudio
+            // 
+            this.btnPlayAudio.Location = new System.Drawing.Point(238, 456);
+            this.btnPlayAudio.Name = "btnPlayAudio";
+            this.btnPlayAudio.Size = new System.Drawing.Size(94, 29);
+            this.btnPlayAudio.TabIndex = 7;
+            this.btnPlayAudio.Text = "Play Audio";
+            this.btnPlayAudio.UseVisualStyleBackColor = true;
+            this.btnPlayAudio.Click += new System.EventHandler(this.btnPlayAudio_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -78,6 +122,10 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(549, 600);
+            this.Controls.Add(this.btnPlayAudio);
+            this.Controls.Add(this.btnSpeechInfo);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnRecordVoice);
             this.Controls.Add(this.chatLogTable);
             this.Controls.Add(this.messageButton);
             this.Controls.Add(this.userInputBox);
@@ -98,5 +146,9 @@
         private TextBox userInputBox;
         private Button messageButton;
         private TableLayoutPanel chatLogTable;
+        private Button btnRecordVoice;
+        private Button btnSave;
+        private Button btnSpeechInfo;
+        private Button btnPlayAudio;
     }
 }

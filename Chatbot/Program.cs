@@ -1,6 +1,6 @@
 namespace Chatbot
 {
-    internal static class Program
+    internal class Program
     {
         /// <summary>
         ///  The main entry point for the application.

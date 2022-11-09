@@ -63,6 +63,7 @@
             this.TimerButton.TabIndex = 3;
             this.TimerButton.Text = "Start";
             this.TimerButton.UseVisualStyleBackColor = true;
+            this.TimerButton.Click += new System.EventHandler(this.TimerButton_Click);
             // 
             // TimerTextBox
             // 
@@ -74,6 +75,7 @@
             // timer1
             // 
             this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // AlarmTimer
             // 

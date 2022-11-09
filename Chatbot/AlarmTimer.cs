@@ -18,5 +18,17 @@ namespace Chatbot
         {
             InitializeComponent();
         }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+                seconds = Convert.ToInt32(TimerTextBox.Text);
+                TimerTextBox.Enabled = false;
+                timer1.Start();
+        }
+
+        private void TimerButton_Click(object sender, EventArgs e)
+        {
+            TimerCountLabel.Text = seconds--.ToString();
+        }
     }
 }

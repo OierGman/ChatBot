@@ -29,6 +29,12 @@ namespace Chatbot
         private void TimerButton_Click(object sender, EventArgs e)
         {
             TimerCountLabel.Text = seconds--.ToString();
+
+            if(seconds <= 0)
+            {
+                timer1.Stop();
+                TimerTextBox.Enabled = true;
+            }
         }
     }
 }

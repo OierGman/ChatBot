@@ -41,21 +41,6 @@ namespace Chatbot
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
             }
-            else if (messageText.Contains("bank holiday"))
-            {
-                ChatBotEngine.BankHolidays();
-
-                TextBox message1 = new TextBox()
-                {
-                    ReadOnly = true,
-                    Dock = DockStyle.Fill,
-                    Multiline = true,
-                };
-
-                message1.Text = APIObjects.MrChat.chat[0].result;
-
-                ChatLogController(message1, 0);
-            }
         }
 
         public async Task BotResponse()

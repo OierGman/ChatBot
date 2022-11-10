@@ -1,6 +1,8 @@
 using Google.Cloud.Speech.V1;
+using Google.Type;
 using NAudio.Wave;
 using static Google.Rpc.Context.AttributeContext.Types;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Chatbot
 {
@@ -33,7 +35,7 @@ namespace Chatbot
             bwp.DiscardOnBufferOverflow = true;
         }
         // user message button click event
-        private void messageButton_Click(object sender, EventArgs e)
+        public void messageButton_Click(object sender, EventArgs e)
         {
             TextBox message = new TextBox()
             {
@@ -49,14 +51,14 @@ namespace Chatbot
             // ChatBotEngine.Joke();
         }
         /// <summary>
-        /// The user input is filtered, and tasks/methods called by depending on keywords.
+        /// The user input is filtered, and tasks/methods called depending on keywords.
         /// </summary>
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
             // convert user input to lower case to remove capitilisation errors 
             messageText = messageText.ToLower();
-            if (messageText.Contains("play") | messageText.Contains("Play"))
+            if (messageText.Contains("play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
@@ -64,8 +66,7 @@ namespace Chatbot
             // search user input for to do list key words 
             else if (messageText.Contains("task") || messageText.Contains("to do"))
             {
-                // calls to do list method
-                ToDoList(null);
+                ToDoList(messageText);
             }
             else
             {
@@ -74,32 +75,18 @@ namespace Chatbot
             }
 
         }
-
-        public async void ToDoList(String Response)
+       
+        public async void ToDoList(String messageText)
         {
-            List<String> TaskList = new List<String>();
-            TextBox Message1 = new TextBox()
-            {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-            };
-            if (Response != null)
-            {
-                Message1.Text = "Please Enter A Valid Response";
-                ChatLogController(Message1, 0);
-            }
-            else
-            {
-                Message1.Text = "What Would You Like To Call This Task";
-                ChatLogController(Message1, 0);
-            }
-
+            String TaskName;
+            List<String> TaskList= new List<String>();
             
-            
+            TaskName = messageText.Remove(0, 12) ;
+            TaskList.Add(TaskName);
 
 
         }
+       
 
         /// <summary>
         /// Chatty will respond with a result, depending on which method called it.

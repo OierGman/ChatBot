@@ -12,8 +12,14 @@ namespace Chatbot
 
         private WaveFileWriter _writer;
 
-        TextBox _message = new TextBox();
+        TextBox _message = new TextBox();\
+        TextBox messageBot = new TextBox();
+
         readonly string _output = "audio.raw";
+        WaveIn waveIn;
+        WaveOut waveOut;
+        WaveFileWriter writer;
+        WaveFileReader reader;
 
         public Form1()
         {
@@ -37,7 +43,6 @@ namespace Chatbot
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
         {
-
             _message.ReadOnly = true;
             _message.Dock = DockStyle.Fill;
             _message.Multiline = true;
@@ -62,13 +67,14 @@ namespace Chatbot
             }
             else
             {
-                if (APIObjects.MrChat.chat.Count < 1)
+                if (APIObjects.MrChat.chat.Count == 0)
                 {
                     await ChatBotEngine.MrChat(messageText);
                     BotResponse(null);
                 }
                 else
                 {
+                    // try catch
                     await ChatBotEngine.Converse(messageText, APIObjects.MrChat.chat[0].conversationID, APIObjects.MrChat.chat[0].host);
                     BotResponse(null);
                 }
@@ -80,21 +86,27 @@ namespace Chatbot
         /// <param name="response">Response from method call.</param>
         public Task BotResponse(string response)
         {
-            TextBox message = new TextBox()
-            {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-            };
+            messageBot.ReadOnly = true;
+            messageBot.Dock = DockStyle.Fill;
+            messageBot.Multiline = true;
+
             if (response != null)
             {
-                message.Text = response;
-                ChatLogController(message, 0);
+                messageBot.Text = response;
+                ChatLogController(messageBot, 0);
             }
             else
             {
-                message.Text = APIObjects.MrChat.chat[0].result;
-                ChatLogController(message, 0);
+                if (APIObjects.MrChat.chat[0].result == null)
+                {
+                    messageBot.Text = "Sorry, I do not understand, could you ask me differently?";
+                    ChatLogController(messageBot, 0);
+                }
+                else
+                {
+                    messageBot.Text = APIObjects.MrChat.chat[0].result;
+                    ChatLogController(messageBot, 0);
+                }
             }
 
             return Task.CompletedTask;

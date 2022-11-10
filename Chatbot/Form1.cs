@@ -12,7 +12,9 @@ namespace Chatbot
 
         WaveFileWriter _writer;
 
+        TextBox message = new TextBox();
         string _output = "audio.raw";
+
         public Form1()
         {
             InitializeComponent();
@@ -35,13 +37,12 @@ namespace Chatbot
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
         {
-            TextBox message = new TextBox()
-            {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-                Text = userInputBox.Text,
-            };
+
+            message.ReadOnly = true;
+            message.Dock = DockStyle.Fill;
+            message.Multiline = true;
+            message.Text = userInputBox.Text;
+            
             userInputBox.Text = "";
             ChatLogController(message, 1);
             ChatDecider(message.Text);
@@ -54,15 +55,23 @@ namespace Chatbot
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
-            if (messageText.Contains("play") | messageText.Contains("Play"))
+            if (messageText.Contains("play") || messageText.Contains("Play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
             }
             else
             {
-                await ChatBotEngine.MrChat(messageText);
-                BotResponse(null);
+                if (APIObjects.MrChat.chat.Count < 1)
+                {
+                    await ChatBotEngine.MrChat(messageText);
+                    BotResponse(null);
+                }
+                else
+                {
+                    await ChatBotEngine.Converse(messageText, APIObjects.MrChat.chat[0].conversationID, APIObjects.MrChat.chat[0].host);
+                    BotResponse(null);
+                }
             }
         }
         /// <summary>

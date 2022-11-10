@@ -54,6 +54,20 @@ namespace Chatbot
             APIObjects.MrChat.chat.Add(chatDeserializedClass);
         }
 
+        public static async Task Converse(string s, string id, string url)
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("http://" + url + "/api/v1/conversation.jsp?appid=2GVUAG-JERAUGG5QG&conversationid=" + id + "&i=" + HttpUtility.UrlEncode(s));
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            APIObjects.MrChat.Root chatDeserializedClass = JsonSerializer.Deserialize<APIObjects.MrChat.Root>(responseBody);
+
+            APIObjects.MrChat.chat.Add(chatDeserializedClass);
+
+            APIObjects.MrChat.chat.RemoveAt(0);
+        }
+
         public async Task<string> YouTubeMusic(string keyWord)
         {
             var youtubeService = new YouTubeService(new BaseClientService.Initializer()

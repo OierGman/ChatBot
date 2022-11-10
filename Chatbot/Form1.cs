@@ -18,6 +18,7 @@ namespace Chatbot
         string output = "audio.raw";
         public Form1()
         {
+         
             InitializeComponent();
             // initialize with welcome chatbot message
             chatLogTable.Controls.Add(new TextBox()
@@ -34,6 +35,14 @@ namespace Chatbot
             waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
             bwp = new BufferedWaveProvider(waveIn.WaveFormat);
             bwp.DiscardOnBufferOverflow = true;
+        }
+        public void Form1_Load(object sender, EventArgs e)
+        {
+            #region TaskDummyData
+            TaskList.Add("Prepare for OOP Mocks, 05/12/22");
+            TaskList.Add("Complete Database Logbooks, 16/12/22");
+            TaskList.Add("Complete OOP Assignment 1, 10/01/23");
+            #endregion
         }
         // user message button click event
         public void messageButton_Click(object sender, EventArgs e)
@@ -64,11 +73,12 @@ namespace Chatbot
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
             }
-            // search user input for to do list key words 
+            // search user input for to do list key words in order to add task 
             else if (messageText.Contains("task"))
             {
-                ToDoList(messageText);
+                ToDoList();
             }
+            // search for a combination of keywords to display to do list
             else if (messageText.Contains("show") && messageText.Contains("to do"))
             {
                 ShowToDoList();
@@ -102,9 +112,9 @@ namespace Chatbot
             
         }
 
-        public async void ToDoList(String messageText)
+        public async void ToDoList()
         {
-            String Task;
+            /*String Task;
             Task= messageText.Remove(0, 7) ;
             TaskList.Add(Task);
             TextBox Message = new TextBox()
@@ -114,8 +124,16 @@ namespace Chatbot
                 Multiline = true,
             };
             Message.Text = "Task successfully added";
-            ChatLogController(Message, 0);
+            ChatLogController(Message, 0);*/
+            
+            TextBox BotMessage = new TextBox();
+            BotMessage.Text = "What would you like to call this task?";
+            BotMessage.ReadOnly = true;
+            BotMessage.Dock = DockStyle.Fill;
+            BotMessage.Multiline = true;
+            ChatLogController(BotMessage,0);
 
+            
         }
        
 
@@ -310,14 +328,6 @@ namespace Chatbot
             messageButton_Click(this, e);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            #region TaskDummyData
-            TaskList.Add("Prepare for OOP Mocks, 05/12/22");
-            TaskList.Add("Complete Database Logbooks, 16/12/22");
-            TaskList.Add("Complete OOP Assignment 1, 10/01/23");
-            #endregion
-
-        }
+        
     }
 }

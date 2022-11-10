@@ -6,20 +6,15 @@ namespace Chatbot
     public partial class Form1 : Form
     {
         private BufferedWaveProvider _bwp;
-
         public WaveIn In { get; private set; }
         public WaveOut Out { get; private set; }
 
         private WaveFileWriter _writer;
 
-        TextBox _message = new TextBox();\
+        TextBox _message = new TextBox();
         TextBox messageBot = new TextBox();
 
         readonly string _output = "audio.raw";
-        WaveIn waveIn;
-        WaveOut waveOut;
-        WaveFileWriter writer;
-        WaveFileReader reader;
 
         public Form1()
         {
@@ -47,12 +42,10 @@ namespace Chatbot
             _message.Dock = DockStyle.Fill;
             _message.Multiline = true;
             _message.Text = userInputBox.Text;
-            
+
             userInputBox.Text = "";
             ChatLogController(_message, 1);
             ChatDecider(_message.Text);
-            // ChatBotEngine.BankHolidays();
-            // ChatBotEngine.Joke();
         }
         /// <summary>
         /// The user input is filtered, and tasks/methods called by depending on keywords.
@@ -207,14 +200,13 @@ namespace Chatbot
         /// </summary>
         private void btnRecordVoice_MouseDown(object sender, MouseEventArgs e)
         {
-            if (NAudio.Wave.WaveIn.DeviceCount < 1)
+            if (WaveIn.DeviceCount < 1)
             {
                 Console.WriteLine("No microphone.");
                 return;
             }
             In = new WaveIn();
             Out = new WaveOut();
-            In = new WaveIn();
             In.DataAvailable += waveIn_DataAvailable;
             In.WaveFormat = new WaveFormat(16000, 1);
             _bwp = new BufferedWaveProvider(In.WaveFormat);

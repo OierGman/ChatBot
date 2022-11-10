@@ -16,6 +16,9 @@ namespace Chatbot
         WaveFileWriter writer;
         WaveFileReader reader;
         string output = "audio.raw";
+        bool TaskCheck = false;
+        int count = 0;
+        String Task;
         public Form1()
         {
          
@@ -47,18 +50,25 @@ namespace Chatbot
         // user message button click event
         public void messageButton_Click(object sender, EventArgs e)
         {
-            TextBox message = new TextBox()
+            if (TaskCheck == false)
             {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-                Text = userInputBox.Text,
-            };
-            userInputBox.Text = "";
-            ChatLogController(message, 1);
-            ChatDecider(message.Text);
-            // ChatBotEngine.BankHolidays();
-            // ChatBotEngine.Joke();
+                TextBox message = new TextBox()
+                {
+                    ReadOnly = true,
+                    Dock = DockStyle.Fill,
+                    Multiline = true,
+                    Text = userInputBox.Text,
+                };
+                userInputBox.Text = "";
+                ChatLogController(message, 1);
+                ChatDecider(message.Text);
+                // ChatBotEngine.BankHolidays();
+                // ChatBotEngine.Joke();
+            }
+            else
+            {
+                ToDoList();
+            }
         }
         /// <summary>
         /// The user input is filtered, and tasks/methods called depending on keywords.
@@ -73,7 +83,7 @@ namespace Chatbot
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
             }
-            // search user input for to do list key words in order to add task 
+            // search user input for to do list key words in order to add TaskCheck 
             else if (messageText.Contains("task"))
             {
                 ToDoList();
@@ -114,27 +124,63 @@ namespace Chatbot
 
         public async void ToDoList()
         {
-            /*String Task;
-            Task= messageText.Remove(0, 7) ;
-            TaskList.Add(Task);
-            TextBox Message = new TextBox()
+            TaskCheck = true;
+
+            if (count == 0)
             {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-            };
-            Message.Text = "Task successfully added";
-            ChatLogController(Message, 0);*/
+                TextBox BotMessage = new TextBox();
+                BotMessage.Text = "What would you like to call this task?";
+                BotMessage.ReadOnly = true;
+                BotMessage.Dock = DockStyle.Fill;
+                BotMessage.Multiline = true;
+                ChatLogController(BotMessage, 0);
+            }
+            else if (count == 1)
+            {
+                Task = userInputBox.Text;
+                TextBox BotMessage = new TextBox();
+                BotMessage.Text = "When is this task due?";
+                BotMessage.ReadOnly = true;
+                BotMessage.Dock = DockStyle.Fill;
+                BotMessage.Multiline = true;
+                ChatLogController(BotMessage, 0);
+                
+                TextBox Message = new TextBox();
+                Message.Text = userInputBox.Text;
+                Message.ReadOnly = true;
+                Message.Dock = DockStyle.Fill;
+                Message.Multiline = true;
+                ChatLogController(Message, 1);
+                userInputBox.Text = "";
+
+            }
+            else if (count == 2)
+            {
+                Task = Task + ", " + userInputBox.Text;
+                TaskList.Add(Task);
+                MessageBox.Show(Task);
+
+                TextBox Message = new TextBox();
+                Message.Text = userInputBox.Text;
+                Message.ReadOnly = true;
+                Message.Dock = DockStyle.Fill;
+                Message.Multiline = true;
+                ChatLogController(Message, 1);
+                userInputBox.Text = "";
+
+                TextBox BotMessage = new TextBox();
+                BotMessage.Text = "Task Added successfully!";
+                BotMessage.ReadOnly = true;
+                BotMessage.Dock = DockStyle.Fill;
+                BotMessage.Multiline = true;
+                ChatLogController(BotMessage, 0);
+                TaskCheck = false;
+            }
             
-            TextBox BotMessage = new TextBox();
-            BotMessage.Text = "What would you like to call this task?";
-            BotMessage.ReadOnly = true;
-            BotMessage.Dock = DockStyle.Fill;
-            BotMessage.Multiline = true;
-            ChatLogController(BotMessage,0);
 
             
-        }
+            ++count;
+                    }
        
 
         /// <summary>

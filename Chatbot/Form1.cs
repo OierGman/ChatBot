@@ -1,5 +1,6 @@
 using Google.Cloud.Speech.V1;
 using NAudio.Wave;
+using static Google.Rpc.Context.AttributeContext.Types;
 
 namespace Chatbot
 {
@@ -53,27 +54,51 @@ namespace Chatbot
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
+            // convert user input to lower case to remove capitilisation errors 
             messageText = messageText.ToLower();
             if (messageText.Contains("play") | messageText.Contains("Play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
             }
+            // search user input for to do list key words 
             else if (messageText.Contains("task") || messageText.Contains("to do"))
             {
-                ToDoList();
-
+                // calls to do list method
+                ToDoList(null);
             }
             else
             {
                 await ChatBotEngine.MrChat(messageText);
                 BotResponse(null);
             }
+
         }
 
-        private void ToDoList()
+        public async void ToDoList(String Response)
         {
+            List<String> TaskList = new List<String>();
+            TextBox Message1 = new TextBox()
+            {
+                ReadOnly = true,
+                Dock = DockStyle.Fill,
+                Multiline = true,
+            };
+            if (Response != null)
+            {
+                Message1.Text = "Please Enter A Valid Response";
+                ChatLogController(Message1, 0);
+            }
+            else
+            {
+                Message1.Text = "What Would You Like To Call This Task";
+                ChatLogController(Message1, 0);
+            }
+
             
+            
+
+
         }
 
         /// <summary>

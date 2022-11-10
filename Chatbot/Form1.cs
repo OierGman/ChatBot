@@ -9,7 +9,8 @@ namespace Chatbot
     public partial class Form1 : Form
     {
         private BufferedWaveProvider bwp;
-
+        String TaskHolder;
+        List<String> TaskList = new List<String>();
         WaveIn waveIn;
         WaveOut waveOut;
         WaveFileWriter writer;
@@ -64,9 +65,13 @@ namespace Chatbot
                 YouTubeAPI(keyWord);
             }
             // search user input for to do list key words 
-            else if (messageText.Contains("task") || messageText.Contains("to do"))
+            else if (messageText.Contains("task"))
             {
                 ToDoList(messageText);
+            }
+            else if (messageText.Contains("show"))
+            {
+                ShowToDoList();
             }
             else
             {
@@ -75,15 +80,39 @@ namespace Chatbot
             }
 
         }
-       
+
+        private void ShowToDoList()
+        {
+            TextBox ShowListMessage = new TextBox()
+            {
+                ReadOnly = true,
+                Dock = DockStyle.Fill,
+                Multiline = true,
+            };
+            int TaskCount = TaskList.Count;
+            for (int i = 0; i < TaskCount; i++)
+            {
+                
+                TaskHolder = TaskHolder + TaskList[i].ToString();
+                ShowListMessage.Text = TaskHolder;
+                ChatLogController(ShowListMessage,0);
+            }
+            
+        }
+
         public async void ToDoList(String messageText)
         {
-            String TaskName;
-            List<String> TaskList= new List<String>();
-            
-            TaskName = messageText.Remove(0, 12) ;
-            TaskList.Add(TaskName);
-
+            String Task;
+            Task= messageText.Remove(0, 7) ;
+            TaskList.Add(Task);
+            TextBox Message = new TextBox()
+            {
+                ReadOnly = true,
+                Dock = DockStyle.Fill,
+                Multiline = true,
+            };
+            Message.Text = "Task successfully added";
+            ChatLogController(Message, 0);
 
         }
        
@@ -277,6 +306,16 @@ namespace Chatbot
             }
 
             messageButton_Click(this, e);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            TaskList.Add("Complete Third Scrum, 15/11/22");
+            TaskList.Add("Prepare for OOP Mocks, 05/12/22");
+            TaskList.Add("Complete Database Logbooks, 16/12/22");
+            TaskList.Add("Complete OOP Assignment 1, 10/01/23");
+            TaskList.Add("Complete Database Assignment, 09/01/23");
+
         }
     }
 }

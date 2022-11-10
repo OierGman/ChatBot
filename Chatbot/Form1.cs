@@ -12,14 +12,14 @@ namespace Chatbot
 
         WaveFileWriter _writer;
 
-        TextBox message = new TextBox();
-        string _output = "audio.raw";
+        TextBox message = new TextBox();\
         TextBox messageBot = new TextBox();
+
+        string _output = "audio.raw";
         WaveIn waveIn;
         WaveOut waveOut;
         WaveFileWriter writer;
         WaveFileReader reader;
-        string output = "audio.raw";
 
         public Form1()
         {

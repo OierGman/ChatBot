@@ -46,6 +46,7 @@
             this.userInputBox.Name = "userInputBox";
             this.userInputBox.Size = new System.Drawing.Size(280, 100);
             this.userInputBox.TabIndex = 1;
+            this.userInputBox.TextChanged += new System.EventHandler(this.userInputBox_TextChanged);
             // 
             // messageButton
             // 

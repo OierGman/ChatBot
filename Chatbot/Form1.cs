@@ -296,5 +296,12 @@ namespace Chatbot
 
             messageButton_Click(this, e);
         }
+
+        private void userInputBox_TextChanged(object sender, EventArgs e)
+        {
+            userInputBox.Text = "Say Something";
+            userInputBox.Enter += textBox_Enter;
+            userInputBox.Leave += textBox_Leave;
+        }
     }
 }

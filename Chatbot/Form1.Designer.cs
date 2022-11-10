@@ -41,7 +41,7 @@
             // 
             this.userInputBox.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.userInputBox.Location = new System.Drawing.Point(20, 730);
-            this.userInputBox.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.userInputBox.Margin = new System.Windows.Forms.Padding(5);
             this.userInputBox.Multiline = true;
             this.userInputBox.Name = "userInputBox";
             this.userInputBox.Size = new System.Drawing.Size(518, 209);
@@ -51,7 +51,7 @@
             // messageButton
             // 
             this.messageButton.Location = new System.Drawing.Point(712, 730);
-            this.messageButton.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.messageButton.Margin = new System.Windows.Forms.Padding(5);
             this.messageButton.Name = "messageButton";
             this.messageButton.Size = new System.Drawing.Size(161, 211);
             this.messageButton.TabIndex = 2;
@@ -65,7 +65,7 @@
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.chatLogTable.Location = new System.Drawing.Point(20, 59);
-            this.chatLogTable.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.chatLogTable.Margin = new System.Windows.Forms.Padding(5);
             this.chatLogTable.Name = "chatLogTable";
             this.chatLogTable.RowCount = 4;
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -78,7 +78,7 @@
             // btnRecordVoice
             // 
             this.btnRecordVoice.Location = new System.Drawing.Point(549, 730);
-            this.btnRecordVoice.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnRecordVoice.Margin = new System.Windows.Forms.Padding(5);
             this.btnRecordVoice.Name = "btnRecordVoice";
             this.btnRecordVoice.Size = new System.Drawing.Size(153, 211);
             this.btnRecordVoice.TabIndex = 4;
@@ -111,6 +111,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;

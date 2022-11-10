@@ -69,7 +69,7 @@ namespace Chatbot
             {
                 ToDoList(messageText);
             }
-            else if (messageText.Contains("show"))
+            else if (messageText.Contains("show") && messageText.Contains("to do"))
             {
                 ShowToDoList();
             }
@@ -83,19 +83,21 @@ namespace Chatbot
 
         private void ShowToDoList()
         {
-            TextBox ShowListMessage = new TextBox()
-            {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-            };
+            
             int TaskCount = TaskList.Count;
             for (int i = 0; i < TaskCount; i++)
             {
                 
-                TaskHolder = TaskHolder + TaskList[i].ToString();
+                TextBox ShowListMessage = new TextBox()
+                {
+                    ReadOnly = true,
+                    Dock = DockStyle.Fill,
+                    Multiline = true,
+                };
+                TaskHolder = TaskList[i].ToString();
                 ShowListMessage.Text = TaskHolder;
                 ChatLogController(ShowListMessage,0);
+                
             }
             
         }
@@ -310,11 +312,11 @@ namespace Chatbot
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            TaskList.Add("Complete Third Scrum, 15/11/22");
+            #region TaskDummyData
             TaskList.Add("Prepare for OOP Mocks, 05/12/22");
             TaskList.Add("Complete Database Logbooks, 16/12/22");
             TaskList.Add("Complete OOP Assignment 1, 10/01/23");
-            TaskList.Add("Complete Database Assignment, 09/01/23");
+            #endregion
 
         }
     }

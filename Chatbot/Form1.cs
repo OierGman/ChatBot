@@ -12,7 +12,7 @@ namespace Chatbot
 
         WaveFileWriter _writer;
 
-        TextBox message = new TextBox();\
+        TextBox message = new TextBox();
         TextBox messageBot = new TextBox();
 
         string _output = "audio.raw";

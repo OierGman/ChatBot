@@ -53,10 +53,16 @@ namespace Chatbot
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
+            messageText = messageText.ToLower();
             if (messageText.Contains("play") | messageText.Contains("Play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
+            }
+            else if (messageText.Contains("task") || messageText.Contains("to do"))
+            {
+                ToDoList();
+
             }
             else
             {
@@ -64,6 +70,12 @@ namespace Chatbot
                 BotResponse(null);
             }
         }
+
+        private void ToDoList()
+        {
+            
+        }
+
         /// <summary>
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>

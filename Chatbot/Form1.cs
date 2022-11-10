@@ -158,7 +158,7 @@ namespace Chatbot
             {
                 Task = Task + ", " + userInputBox.Text;
                 TaskList.Add(Task);
-                MessageBox.Show(Task);
+                
 
                 TextBox Message = new TextBox();
                 Message.Text = userInputBox.Text;
@@ -176,11 +176,11 @@ namespace Chatbot
                 ChatLogController(BotMessage, 0);
                 TaskCheck = false;
             }
-            
 
-            
+
+
             ++count;
-                    }
+        }
        
 
         /// <summary>

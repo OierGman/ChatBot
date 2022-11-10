@@ -5,9 +5,15 @@ namespace Chatbot
 {
     public partial class Form1 : Form
     {
-        private BufferedWaveProvider bwp;
+        private BufferedWaveProvider _bwp;
+
+        public WaveIn In { get; private set; }
+        public WaveOut Out { get; private set; }
+
+        WaveFileWriter _writer;
 
         TextBox message = new TextBox();
+        string _output = "audio.raw";
         TextBox messageBot = new TextBox();
         WaveIn waveIn;
         WaveOut waveOut;
@@ -26,13 +32,13 @@ namespace Chatbot
                 Multiline = true,
                 Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
             }, 0, 3);
-            waveOut = new WaveOut();
-            waveIn = new WaveIn();
+            Out = new WaveOut();
+            In = new WaveIn();
 
-            waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
-            bwp = new BufferedWaveProvider(waveIn.WaveFormat);
-            bwp.DiscardOnBufferOverflow = true;
+            In.DataAvailable += waveIn_DataAvailable;
+            In.WaveFormat = new WaveFormat(16000, 1);
+            _bwp = new BufferedWaveProvider(In.WaveFormat);
+            _bwp.DiscardOnBufferOverflow = true;
         }
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
@@ -191,7 +197,7 @@ namespace Chatbot
         }
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
-            bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
+            _bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
 
         }
         /// <summary>
@@ -204,41 +210,41 @@ namespace Chatbot
                 Console.WriteLine("No microphone.");
                 return;
             }
-            waveIn = new WaveIn();
-            waveOut = new WaveOut();
-            waveIn = new WaveIn();
-            waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
-            bwp = new BufferedWaveProvider(waveIn.WaveFormat);
-            bwp.DiscardOnBufferOverflow = true;
-            waveIn.StartRecording();
+            In = new WaveIn();
+            Out = new WaveOut();
+            In = new WaveIn();
+            In.DataAvailable += waveIn_DataAvailable;
+            In.WaveFormat = new WaveFormat(16000, 1);
+            _bwp = new BufferedWaveProvider(In.WaveFormat);
+            _bwp.DiscardOnBufferOverflow = true;
+            In.StartRecording();
         }
         /// <summary>
         /// Sends audio file to Google Cloud Speech-to-Text API for transcription.
         /// </summary>
         private void btnRecordVoice_MouseUp(object sender, MouseEventArgs e)
         {
-            waveIn.StopRecording();
+            In.StopRecording();
 
             if (File.Exists("audio.raw"))
                 File.Delete("audio.raw");
 
-            writer = new WaveFileWriter(output, waveIn.WaveFormat);
+            _writer = new WaveFileWriter(_output, In.WaveFormat);
 
-            byte[] buffer = new byte[bwp.BufferLength];
+            byte[] buffer = new byte[_bwp.BufferLength];
             int offset = 0;
-            int count = bwp.BufferLength;
+            int count = _bwp.BufferLength;
 
-            var read = bwp.Read(buffer, offset, count);
+            var read = _bwp.Read(buffer, offset, count);
             if (count > 0)
             {
-                writer.Write(buffer, offset, read);
+                _writer.Write(buffer, offset, read);
             }
 
-            waveIn.Dispose();
-            waveIn = null;
-            writer.Close();
-            writer = null;
+            In.Dispose();
+            In = null;
+            _writer.Close();
+            _writer = null;
 
             if (File.Exists("audio.raw"))
             {

@@ -10,10 +10,10 @@ namespace Chatbot
         public WaveIn In { get; private set; }
         public WaveOut Out { get; private set; }
 
-        WaveFileWriter _writer;
+        private WaveFileWriter _writer;
 
-        TextBox message = new TextBox();
-        string _output = "audio.raw";
+        TextBox _message = new TextBox();
+        readonly string _output = "audio.raw";
 
         public Form1()
         {
@@ -22,8 +22,8 @@ namespace Chatbot
             chatLogTable.Controls.Add(new TextBox()
             {
                 ReadOnly = true,
-                Dock = DockStyle.Fill,
                 Multiline = true,
+                Dock = DockStyle.Fill,
                 Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
             }, 0, 3);
             Out = new WaveOut();
@@ -38,14 +38,14 @@ namespace Chatbot
         private void messageButton_Click(object sender, EventArgs e)
         {
 
-            message.ReadOnly = true;
-            message.Dock = DockStyle.Fill;
-            message.Multiline = true;
-            message.Text = userInputBox.Text;
+            _message.ReadOnly = true;
+            _message.Dock = DockStyle.Fill;
+            _message.Multiline = true;
+            _message.Text = userInputBox.Text;
             
             userInputBox.Text = "";
-            ChatLogController(message, 1);
-            ChatDecider(message.Text);
+            ChatLogController(_message, 1);
+            ChatDecider(_message.Text);
             // ChatBotEngine.BankHolidays();
             // ChatBotEngine.Joke();
         }
@@ -78,9 +78,9 @@ namespace Chatbot
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>
         /// <param name="response">Response from method call.</param>
-        public async Task BotResponse(string response)
+        public Task BotResponse(string response)
         {
-            TextBox message1 = new TextBox()
+            TextBox message = new TextBox()
             {
                 ReadOnly = true,
                 Dock = DockStyle.Fill,
@@ -88,14 +88,16 @@ namespace Chatbot
             };
             if (response != null)
             {
-                message1.Text = response;
-                ChatLogController(message1, 0);
+                message.Text = response;
+                ChatLogController(message, 0);
             }
             else
             {
-                message1.Text = APIObjects.MrChat.chat[0].result;
-                ChatLogController(message1, 0);
+                message.Text = APIObjects.MrChat.chat[0].result;
+                ChatLogController(message, 0);
             }
+
+            return Task.CompletedTask;
         }
         /// <summary>
         /// This method takes a string and parses to the youtube api, returns title of video, as well as opening youtube link via Task.

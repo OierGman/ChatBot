@@ -1,6 +1,7 @@
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
 using NAudio.Wave;
+using System.Speech.Synthesis;
 
 namespace Chatbot
 {
@@ -73,6 +74,7 @@ namespace Chatbot
                 {
                     str += eEvent.date + " " + eEvent.title + "\r\n";    //store the holiday events in the string
                 }
+                BotResponse("Here are all the confirmed bank holidays I know of");
                 MessageBox.Show(str);
             }
             else
@@ -92,6 +94,7 @@ namespace Chatbot
                     }
                     catch (Exception e)
                     {
+                        Console.WriteLine(e.ToString());
                     }
                 }
             }
@@ -102,6 +105,7 @@ namespace Chatbot
         /// <param name="response">Response from method call.</param>
         public Task BotResponse(string response)
         {
+            SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
             _messageBot.ReadOnly = true;
             _messageBot.Dock = DockStyle.Fill;
             _messageBot.Multiline = true;
@@ -124,6 +128,7 @@ namespace Chatbot
                     ChatLogController(_messageBot, 0);
                 }
             }
+            speechSynthesis.Speak(_messageBot.Text);
 
             return Task.CompletedTask;
         }

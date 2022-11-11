@@ -9,9 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="SpeechLib">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>4</VersionMinor>
+      <VersionMajor>5</VersionMajor>
+      <Guid>c866ca3a-32f7-11d2-9602-00c04f8ee628</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Google.Apis.YouTube.v3" Version="1.57.0.2827" />
     <PackageReference Include="Google.Cloud.Speech.V1" Version="3.0.0" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="System.Speech" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

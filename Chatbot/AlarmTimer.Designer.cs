@@ -37,6 +37,8 @@
             this.AlarmTimePicker = new System.Windows.Forms.DateTimePicker();
             this.AlarmLabel = new System.Windows.Forms.Label();
             this.SetAlarmButton = new System.Windows.Forms.Button();
+            this.StopAlarmButton = new System.Windows.Forms.Button();
+            this.AlarmRunningLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // TimerTextLabel
@@ -83,16 +85,15 @@
             // AlarmTimePicker
             // 
             this.AlarmTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.AlarmTimePicker.Location = new System.Drawing.Point(96, 201);
+            this.AlarmTimePicker.Location = new System.Drawing.Point(96, 192);
             this.AlarmTimePicker.Name = "AlarmTimePicker";
             this.AlarmTimePicker.Size = new System.Drawing.Size(132, 23);
             this.AlarmTimePicker.TabIndex = 5;
-            this.AlarmTimePicker.ValueChanged += new System.EventHandler(this.AlarmTimePicker_ValueChanged);
             // 
             // AlarmLabel
             // 
             this.AlarmLabel.AutoSize = true;
-            this.AlarmLabel.Location = new System.Drawing.Point(33, 183);
+            this.AlarmLabel.Location = new System.Drawing.Point(34, 174);
             this.AlarmLabel.Name = "AlarmLabel";
             this.AlarmLabel.Size = new System.Drawing.Size(263, 15);
             this.AlarmLabel.TabIndex = 6;
@@ -100,13 +101,32 @@
             // 
             // SetAlarmButton
             // 
-            this.SetAlarmButton.Location = new System.Drawing.Point(123, 230);
+            this.SetAlarmButton.Location = new System.Drawing.Point(63, 239);
             this.SetAlarmButton.Name = "SetAlarmButton";
-            this.SetAlarmButton.Size = new System.Drawing.Size(75, 23);
+            this.SetAlarmButton.Size = new System.Drawing.Size(96, 23);
             this.SetAlarmButton.TabIndex = 7;
             this.SetAlarmButton.Text = "Set Alarm";
             this.SetAlarmButton.UseVisualStyleBackColor = true;
             this.SetAlarmButton.Click += new System.EventHandler(this.SetAlarmButton_Click);
+            // 
+            // StopAlarmButton
+            // 
+            this.StopAlarmButton.Location = new System.Drawing.Point(165, 239);
+            this.StopAlarmButton.Name = "StopAlarmButton";
+            this.StopAlarmButton.Size = new System.Drawing.Size(96, 23);
+            this.StopAlarmButton.TabIndex = 8;
+            this.StopAlarmButton.Text = "Stop Alarm";
+            this.StopAlarmButton.UseVisualStyleBackColor = true;
+            this.StopAlarmButton.Click += new System.EventHandler(this.StopAlarmButton_Click);
+            // 
+            // AlarmRunningLabel
+            // 
+            this.AlarmRunningLabel.AutoSize = true;
+            this.AlarmRunningLabel.Location = new System.Drawing.Point(136, 221);
+            this.AlarmRunningLabel.Name = "AlarmRunningLabel";
+            this.AlarmRunningLabel.Size = new System.Drawing.Size(48, 15);
+            this.AlarmRunningLabel.TabIndex = 9;
+            this.AlarmRunningLabel.Text = "Status...";
             // 
             // AlarmTimer
             // 
@@ -114,6 +134,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MintCream;
             this.ClientSize = new System.Drawing.Size(333, 294);
+            this.Controls.Add(this.AlarmRunningLabel);
+            this.Controls.Add(this.StopAlarmButton);
             this.Controls.Add(this.SetAlarmButton);
             this.Controls.Add(this.AlarmLabel);
             this.Controls.Add(this.AlarmTimePicker);
@@ -139,5 +161,7 @@
         private DateTimePicker AlarmTimePicker;
         private Label AlarmLabel;
         private Button SetAlarmButton;
+        private Button StopAlarmButton;
+        private Label AlarmRunningLabel;
     }
 }

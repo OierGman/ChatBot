@@ -49,6 +49,7 @@ namespace Chatbot
             ChatLogController(_message, 1);
             ChatDecider(_message.Text);
         }
+
         /// <summary>
         /// The user input is filtered, and tasks/methods called by depending on keywords.
         /// </summary>
@@ -122,6 +123,31 @@ namespace Chatbot
             }
             
         }
+
+        private void CheckInputBox()
+        {
+            userInputBox.Text = "Say Something";
+            userInputBox.Enter += textBox_Enter;
+            userInputBox.Leave += textBox_Leave;
+
+        }
+
+        private void textBox_Enter(object sender, EventArgs e)
+        {
+            if (userInputBox.Text == "Say Something")
+            {
+                userInputBox.Text = "";
+            }
+        }
+
+        private void textBox_Leave(object sender, EventArgs e)
+        {
+            if (userInputBox.Text == "")
+            {
+                userInputBox.Text = "Say Something";
+            }
+        }
+
         /// <summary>
         /// This method takes a string and parses to the youtube api, returns title of video, as well as opening youtube link via Task.
         /// </summary>
@@ -292,6 +318,13 @@ namespace Chatbot
             }
 
             messageButton_Click(this, e);
+        }
+
+        private void userInputBox_TextChanged(object sender, EventArgs e)
+        {
+            userInputBox.Text = "Say Something";
+            userInputBox.Enter += textBox_Enter;
+            userInputBox.Leave += textBox_Leave;
         }
     }
 }

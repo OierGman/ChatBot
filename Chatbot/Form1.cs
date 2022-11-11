@@ -17,6 +17,7 @@ namespace Chatbot
         TextBox _messageBot = new TextBox();
 
         readonly string _output = "audio.raw";
+        bool _talkingBot = false;
 
         public Form1()
         {
@@ -47,7 +48,8 @@ namespace Chatbot
             if (_message.Text == "")
             {
                 return;
-            } else if (_message.Text == "Say something")
+            } 
+            else if (_message.Text == "Say something")
             {
                 return;
             }
@@ -66,7 +68,18 @@ namespace Chatbot
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
-            } else if (messageText.Contains("bank holiday"))
+            } 
+            else if (messageText.Contains("speak to me"))
+            {
+                _talkingBot = true;
+                BotResponse("Ok, I will start speaking to you");
+            }
+            else if (messageText.Contains("stop speaking"))
+            {
+                BotResponse("Ok, I will stop speaking to you");
+                _talkingBot = false;
+            }
+            else if (messageText.Contains("bank holiday"))
             {
                 await ChatBotEngine.BankHolidays();
                 string str = null;
@@ -128,7 +141,10 @@ namespace Chatbot
                     ChatLogController(_messageBot, 0);
                 }
             }
-            speechSynthesis.Speak(_messageBot.Text);
+            if (_talkingBot == true)
+            {
+                speechSynthesis.Speak(_messageBot.Text);
+            }
 
             return Task.CompletedTask;
         }

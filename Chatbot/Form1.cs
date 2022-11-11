@@ -1,3 +1,4 @@
+using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
 using NAudio.Wave;
 
@@ -12,7 +13,7 @@ namespace Chatbot
         private WaveFileWriter _writer;
 
         TextBox _message = new TextBox();
-        TextBox messageBot = new TextBox();
+        TextBox _messageBot = new TextBox();
 
         readonly string _output = "audio.raw";
 
@@ -42,6 +43,13 @@ namespace Chatbot
             _message.Dock = DockStyle.Fill;
             _message.Multiline = true;
             _message.Text = userInputBox.Text;
+            if (_message.Text == "")
+            {
+                return;
+            } else if (_message.Text == "Say something")
+            {
+                return;
+            }
 
             userInputBox.Text = "";
             ChatLogController(_message, 1);
@@ -57,10 +65,19 @@ namespace Chatbot
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
+            } else if (messageText.Contains("bank holiday"))
+            {
+                await ChatBotEngine.BankHolidays();
+                string str = null;
+                foreach (var eEvent in BankHolidays.bankHolidays)
+                {
+                    str += eEvent.date + " " + eEvent.title + "\r\n";    //store the holiday events in the string
+                }
+                MessageBox.Show(str);
             }
             else
             {
-                if (APIObjects.MrChat.chat.Count == 0)
+                if (MrChat.chat.Count == 0)
                 {
                     await ChatBotEngine.MrChat(messageText);
                     BotResponse(null);
@@ -68,8 +85,14 @@ namespace Chatbot
                 else
                 {
                     // try catch
-                    await ChatBotEngine.Converse(messageText, APIObjects.MrChat.chat[0].conversationID, APIObjects.MrChat.chat[0].host);
-                    BotResponse(null);
+                    try
+                    {
+                        await ChatBotEngine.Converse(messageText, MrChat.chat[0].conversationID, MrChat.chat[0].host);
+                        BotResponse(null);
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
         }
@@ -79,26 +102,26 @@ namespace Chatbot
         /// <param name="response">Response from method call.</param>
         public Task BotResponse(string response)
         {
-            messageBot.ReadOnly = true;
-            messageBot.Dock = DockStyle.Fill;
-            messageBot.Multiline = true;
+            _messageBot.ReadOnly = true;
+            _messageBot.Dock = DockStyle.Fill;
+            _messageBot.Multiline = true;
 
             if (response != null)
             {
-                messageBot.Text = response;
-                ChatLogController(messageBot, 0);
+                _messageBot.Text = response;
+                ChatLogController(_messageBot, 0);
             }
             else
             {
-                if (APIObjects.MrChat.chat[0].result == null)
+                if (MrChat.chat[0].result == null)
                 {
-                    messageBot.Text = "Sorry, I do not understand, could you ask me differently?";
-                    ChatLogController(messageBot, 0);
+                    _messageBot.Text = "Sorry, I do not understand, could you ask me differently?";
+                    ChatLogController(_messageBot, 0);
                 }
                 else
                 {
-                    messageBot.Text = APIObjects.MrChat.chat[0].result;
-                    ChatLogController(messageBot, 0);
+                    _messageBot.Text = MrChat.chat[0].result;
+                    ChatLogController(_messageBot, 0);
                 }
             }
 

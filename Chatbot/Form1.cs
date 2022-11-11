@@ -13,8 +13,24 @@ namespace Chatbot
 
         private WaveFileWriter _writer;
 
-        TextBox _message = new TextBox();
-        TextBox _messageBot = new TextBox();
+        Round _message = new Round()
+        {
+            ReadOnly = true,
+            Multiline = true,
+            Dock = DockStyle.Fill,
+            BorderStyle = BorderStyle.None,
+            TextAlign = HorizontalAlignment.Center,
+            BackColor = Color.LimeGreen,
+        };
+        Round _messageBot = new Round()
+        {
+            ReadOnly = true,
+            Multiline = true,
+            Dock = DockStyle.Fill,
+            BorderStyle = BorderStyle.None,
+            TextAlign = HorizontalAlignment.Center,
+            BackColor = Color.LimeGreen,
+        };
 
         readonly string _output = "audio.raw";
         bool _talkingBot = false;
@@ -23,13 +39,18 @@ namespace Chatbot
         {
             InitializeComponent();
             // initialize with welcome chatbot message
-            chatLogTable.Controls.Add(new TextBox()
+            chatLogTable.Controls.Add(new Round()
             {
                 ReadOnly = true,
                 Multiline = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.LimeGreen,
+                TextAlign = HorizontalAlignment.Center,
                 Dock = DockStyle.Fill,
                 Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
-            }, 0, 3);
+            }, 0, 3) ; 
+
+
             Out = new WaveOut();
             In = new WaveIn();
 
@@ -37,13 +58,16 @@ namespace Chatbot
             In.WaveFormat = new WaveFormat(16000, 1);
             _bwp = new BufferedWaveProvider(In.WaveFormat);
             _bwp.DiscardOnBufferOverflow = true;
+        }        
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
         }
+
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
         {
-            _message.ReadOnly = true;
-            _message.Dock = DockStyle.Fill;
-            _message.Multiline = true;
             _message.Text = userInputBox.Text;
             if (_message.Text == "")
             {
@@ -53,8 +77,8 @@ namespace Chatbot
             {
                 return;
             }
+            userInputBox.Text = ""; 
 
-            userInputBox.Text = "";
             ChatLogController(_message, 1);
             ChatDecider(_message.Text);
         }
@@ -119,9 +143,6 @@ namespace Chatbot
         public Task BotResponse(string response)
         {
             SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
-            _messageBot.ReadOnly = true;
-            _messageBot.Dock = DockStyle.Fill;
-            _messageBot.Multiline = true;
 
             if (response != null)
             {
@@ -169,7 +190,7 @@ namespace Chatbot
         /// </summary>
         /// <param name="message">A message as a Textbox</param>
         /// <param name="i">Index of message.</param>
-        private void ChatLogController(TextBox message, int i)
+        private void ChatLogController(Round message, int i)
         {
             var botMessageOne = chatLogTable.GetControlFromPosition(0, 3);
             var botMessageTwo = chatLogTable.GetControlFromPosition(0, 2);
@@ -231,9 +252,20 @@ namespace Chatbot
             {
 
             }
-
             chatLogTable.Controls.Add(message, i, 3);
+            /*
+            chatLogTable.Controls.Add(new Round()
+            {
+                ReadOnly = true,
+                Multiline = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.LimeGreen,
+                Dock = DockStyle.Fill,
+                Text = message
+            }, i, 3);
+            */
         }
+
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
             _bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
@@ -313,6 +345,11 @@ namespace Chatbot
             }
 
             messageButton_Click(this, e);
+        }
+
+        private void round1_TextChanged(object sender, EventArgs e)
+        {
+            Round message = new Round();
         }
     }
 }

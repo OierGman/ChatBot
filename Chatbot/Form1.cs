@@ -1,6 +1,9 @@
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
+using Google.Type;
 using NAudio.Wave;
+using static Google.Rpc.Context.AttributeContext.Types;
+using static System.Net.Mime.MediaTypeNames;
 using System.Speech.Synthesis;
 
 namespace Chatbot
@@ -20,6 +23,7 @@ namespace Chatbot
 
         public Form1()
         {
+         
             InitializeComponent();
             // initialize with welcome chatbot message
             chatLogTable.Controls.Add(new TextBox()
@@ -37,8 +41,16 @@ namespace Chatbot
             _bwp = new BufferedWaveProvider(In.WaveFormat);
             _bwp.DiscardOnBufferOverflow = true;
         }
+        public void Form1_Load(object sender, EventArgs e)
+        {
+            #region TaskDummyData
+            TaskList.Add("Prepare for OOP Mocks, 05/12/22");
+            TaskList.Add("Complete Database Logbooks, 16/12/22");
+            TaskList.Add("Complete OOP Assignment 1, 10/01/23");
+            #endregion
+        }
         // user message button click event
-        private void messageButton_Click(object sender, EventArgs e)
+        public void messageButton_Click(object sender, EventArgs e)
         {
             _message.ReadOnly = true;
             _message.Dock = DockStyle.Fill;
@@ -57,12 +69,14 @@ namespace Chatbot
             ChatDecider(_message.Text);
         }
         /// <summary>
-        /// The user input is filtered, and tasks/methods called by depending on keywords.
+        /// The user input is filtered, and tasks/methods called depending on keywords.
         /// </summary>
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
-            if (messageText.Contains("play") || messageText.Contains("Play"))
+            // convert user input to lower case to remove capitilisation errors 
+            messageText = messageText.ToLower();
+            if (messageText.Contains("play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
@@ -76,6 +90,16 @@ namespace Chatbot
                 }
                 BotResponse("Here are all the confirmed bank holidays I know of");
                 MessageBox.Show(str);
+            }
+            // search user input for to do list key words in order to add TaskCheck 
+            else if (messageText.Contains("task"))
+            {
+                ToDoList();
+            }
+            // search for a combination of keywords to display to do list
+            else if (messageText.Contains("show") && messageText.Contains("to do"))
+            {
+                ShowToDoList();
             }
             else
             {
@@ -99,6 +123,68 @@ namespace Chatbot
                 }
             }
         }
+
+        public async void ToDoList()
+        {
+            TaskCheck = true;
+
+            if (count == 0)
+            {
+                TextBox BotMessage = new TextBox();
+                BotMessage.Text = "What would you like to call this task?";
+                BotMessage.ReadOnly = true;
+                BotMessage.Dock = DockStyle.Fill;
+                BotMessage.Multiline = true;
+                ChatLogController(BotMessage, 0);
+            }
+            else if (count == 1)
+            {
+                Task = userInputBox.Text;
+                TextBox BotMessage = new TextBox();
+                BotMessage.Text = "When is this task due?";
+                BotMessage.ReadOnly = true;
+                BotMessage.Dock = DockStyle.Fill;
+                BotMessage.Multiline = true;
+                ChatLogController(BotMessage, 0);
+                
+                TextBox Message = new TextBox();
+                Message.Text = userInputBox.Text;
+                Message.ReadOnly = true;
+                Message.Dock = DockStyle.Fill;
+                Message.Multiline = true;
+                ChatLogController(Message, 1);
+                userInputBox.Text = "";
+
+            }
+            else if (count == 2)
+            {
+                Task = Task + ", " + userInputBox.Text;
+                TaskList.Add(Task);
+                
+
+                TextBox Message = new TextBox();
+                Message.Text = userInputBox.Text;
+                Message.ReadOnly = true;
+                Message.Dock = DockStyle.Fill;
+                Message.Multiline = true;
+                ChatLogController(Message, 1);
+                userInputBox.Text = "";
+
+                TextBox BotMessage = new TextBox();
+                BotMessage.Text = "Task Added successfully!";
+                BotMessage.ReadOnly = true;
+                BotMessage.Dock = DockStyle.Fill;
+                BotMessage.Multiline = true;
+                ChatLogController(BotMessage, 0);
+                TaskCheck = false;
+            }
+
+
+
+            ++count;
+        }
+       
+
         /// <summary>
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>
@@ -298,5 +384,7 @@ namespace Chatbot
 
             messageButton_Click(this, e);
         }
+
+        
     }
 }

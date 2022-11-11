@@ -13,10 +13,16 @@ namespace Chatbot
     public partial class AlarmTimer : Form
     {
         int seconds;
+        System.Timers.Timer timer;
 
         public AlarmTimer()
         {
             InitializeComponent();
+        }
+
+        private void AlarmTimer_Load(object sender, EventArgs e)
+        {
+            timer = new System.Timers.Timer();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -36,5 +42,17 @@ namespace Chatbot
                 TimerTextBox.Enabled = true;
             }
         }
+
+        private void AlarmTimePicker_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SetAlarmButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
 }

@@ -13,29 +13,22 @@ namespace Chatbot
 
         private WaveFileWriter _writer;
 
-        TextBox _message = new TextBox();
-        TextBox _messageBot = new TextBox();
+        private TextBox _message = new TextBox();
+        private TextBox _messageBot = new TextBox();
 
-        readonly string _output = "audio.raw";
+        private const string Output = "audio.raw";
 
         public Form1()
         {
             InitializeComponent();
             // initialize with welcome chatbot message
-            chatLogTable.Controls.Add(new TextBox()
-            {
-                ReadOnly = true,
-                Multiline = true,
-                Dock = DockStyle.Fill,
-                Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
-            }, 0, 3);
             Out = new WaveOut();
             In = new WaveIn();
-
             In.DataAvailable += waveIn_DataAvailable;
             In.WaveFormat = new WaveFormat(16000, 1);
             _bwp = new BufferedWaveProvider(In.WaveFormat);
             _bwp.DiscardOnBufferOverflow = true;
+            BotResponse("Hello! I'm Chatty, your personal assistant! How can I help?");
         }
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
@@ -103,9 +96,8 @@ namespace Chatbot
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>
         /// <param name="response">Response from method call.</param>
-        public Task BotResponse(string response)
+        public void BotResponse(string response)
         {
-            SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
             _messageBot.ReadOnly = true;
             _messageBot.Dock = DockStyle.Fill;
             _messageBot.Multiline = true;
@@ -128,9 +120,7 @@ namespace Chatbot
                     ChatLogController(_messageBot, 0);
                 }
             }
-            speechSynthesis.Speak(_messageBot.Text);
-
-            return Task.CompletedTask;
+            
         }
         /// <summary>
         /// This method takes a string and parses to the youtube api, returns title of video, as well as opening youtube link via Task.
@@ -217,6 +207,11 @@ namespace Chatbot
             }
 
             chatLogTable.Controls.Add(message, i, 3);
+            if (i == 0)
+            {
+                SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
+                speechSynthesis.Speak(_messageBot.Text);
+            }
         }
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
@@ -251,7 +246,7 @@ namespace Chatbot
             if (File.Exists("audio.raw"))
                 File.Delete("audio.raw");
 
-            _writer = new WaveFileWriter(_output, In.WaveFormat);
+            _writer = new WaveFileWriter(Output, In.WaveFormat);
 
             byte[] buffer = new byte[_bwp.BufferLength];
             int offset = 0;

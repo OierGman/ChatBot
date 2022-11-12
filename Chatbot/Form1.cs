@@ -13,24 +13,7 @@ namespace Chatbot
 
         private WaveFileWriter _writer;
 
-        Round _message = new Round()
-        {
-            ReadOnly = true,
-            Multiline = true,
-            Dock = DockStyle.Fill,
-            BorderStyle = BorderStyle.None,
-            TextAlign = HorizontalAlignment.Center,
-            BackColor = Color.LimeGreen,
-        };
-        Round _messageBot = new Round()
-        {
-            ReadOnly = true,
-            Multiline = true,
-            Dock = DockStyle.Fill,
-            BorderStyle = BorderStyle.None,
-            TextAlign = HorizontalAlignment.Center,
-            BackColor = Color.LimeGreen,
-        };
+        string _messageBot;
 
         readonly string _output = "audio.raw";
         bool _talkingBot = false;
@@ -68,19 +51,31 @@ namespace Chatbot
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
         {
-            _message.Text = userInputBox.Text;
-            if (_message.Text == "")
+            //_message.Text = userInputBox.Text;
+            if (userInputBox.Text == "")
             {
                 return;
             } 
-            else if (_message.Text == "Say something")
+            else if (userInputBox.Text == "Say something")
             {
                 return;
             }
-            userInputBox.Text = ""; 
+          
+            ChatLogController(new Round()
+            {
+                ReadOnly = true,
+                Multiline = true,
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                TextAlign = HorizontalAlignment.Center,
+                Size = new Size(224, 71),
+                BackColor = Color.LimeGreen,
+                Text = userInputBox.Text
+            }, 1);
 
-            ChatLogController(_message, 1);
-            ChatDecider(_message.Text);
+            ChatDecider(userInputBox.Text);
+
+            // userInputBox.Text = "";
         }
         /// <summary>
         /// The user input is filtered, and tasks/methods called by depending on keywords.
@@ -143,30 +138,60 @@ namespace Chatbot
         public Task BotResponse(string response)
         {
             SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
-
+            //Thread.Sleep(10000);
             if (response != null)
             {
-                _messageBot.Text = response;
-                ChatLogController(_messageBot, 0);
+                _messageBot = response;
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),//224,71,
+                    BackColor = Color.LimeGreen,
+                    Text = response
+                }, 0);
             }
             else
             {
                 if (MrChat.chat[0].result == null)
                 {
-                    _messageBot.Text = "Sorry, I do not understand, could you ask me differently?";
-                    ChatLogController(_messageBot, 0);
+                    _messageBot = "Sorry, I do not understand, could you ask me differently?";
+                    ChatLogController(new Round()
+                    {
+                        ReadOnly = true,
+                        Multiline = true,
+                        Dock = DockStyle.Fill,
+                        BorderStyle = BorderStyle.None,
+                        TextAlign = HorizontalAlignment.Center,
+                        Size = new Size(224, 71),//224,71,
+                        BackColor = Color.LimeGreen,
+                        Text = "Sorry, I do not understand, could you ask me differently?"
+                    }, 0);
                 }
                 else
                 {
-                    _messageBot.Text = MrChat.chat[0].result;
-                    ChatLogController(_messageBot, 0);
+                    _messageBot = MrChat.chat[0].result;
+                    ChatLogController(new Round()
+                    {
+                        ReadOnly = true,
+                        Multiline = true,
+                        Dock = DockStyle.Fill,
+                        BorderStyle = BorderStyle.None,
+                        TextAlign = HorizontalAlignment.Center,
+                        Size = new Size(224, 71),//224,71,
+                        BackColor = Color.LimeGreen,
+                        Text = MrChat.chat[0].result
+                    }, 0);
                 }
             }
             if (_talkingBot == true)
             {
-                speechSynthesis.Speak(_messageBot.Text);
+                speechSynthesis.Speak(_messageBot);
             }
-
+            userInputBox.Text = "";
             return Task.CompletedTask;
         }
         /// <summary>
@@ -192,13 +217,13 @@ namespace Chatbot
         /// <param name="i">Index of message.</param>
         private void ChatLogController(Round message, int i)
         {
-            var botMessageOne = chatLogTable.GetControlFromPosition(0, 3);
-            var botMessageTwo = chatLogTable.GetControlFromPosition(0, 2);
-            var botMessageThree = chatLogTable.GetControlFromPosition(0, 1);
+            var botMessageOne = (Round)chatLogTable.GetControlFromPosition(0, 3);
+            var botMessageTwo = (Round)chatLogTable.GetControlFromPosition(0, 2);
+            var botMessageThree = (Round)chatLogTable.GetControlFromPosition(0, 1);
             chatLogTable.Controls.Remove(chatLogTable.GetControlFromPosition(0, 0));
-            var userMessageOne = chatLogTable.GetControlFromPosition(1, 3);
-            var userMessageTwo = chatLogTable.GetControlFromPosition(1, 2);
-            var userMessageThree = chatLogTable.GetControlFromPosition(1, 1);
+            var userMessageOne = (Round)chatLogTable.GetControlFromPosition(1, 3);
+            var userMessageTwo = (Round)chatLogTable.GetControlFromPosition(1, 2);
+            var userMessageThree = (Round)chatLogTable.GetControlFromPosition(1, 1);
             chatLogTable.Controls.Remove(chatLogTable.GetControlFromPosition(1, 0));
             // no 1 2, 0 3, 0 2, 0 0
             chatLogTable.Controls.Clear();
@@ -210,7 +235,6 @@ namespace Chatbot
             {
 
             }
-
             try
             {
                 chatLogTable.Controls.Add(botMessageTwo, 0, 1);
@@ -235,7 +259,6 @@ namespace Chatbot
             {
 
             }
-
             try
             {
                 chatLogTable.Controls.Add(userMessageTwo, 1, 1);
@@ -253,17 +276,6 @@ namespace Chatbot
 
             }
             chatLogTable.Controls.Add(message, i, 3);
-            /*
-            chatLogTable.Controls.Add(new Round()
-            {
-                ReadOnly = true,
-                Multiline = true,
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.LimeGreen,
-                Dock = DockStyle.Fill,
-                Text = message
-            }, i, 3);
-            */
         }
 
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)

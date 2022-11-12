@@ -163,7 +163,6 @@
             this.MinimumSize = new System.Drawing.Size(498, 495);
             this.Name = "Form1";
             this.Text = "Chatty";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.chatLogTable.ResumeLayout(false);
             this.chatLogTable.PerformLayout();
             this.ResumeLayout(false);

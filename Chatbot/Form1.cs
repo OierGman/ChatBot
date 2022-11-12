@@ -12,9 +12,7 @@ namespace Chatbot
         public WaveOut Out { get; private set; }
 
         private WaveFileWriter _writer;
-
         string _messageBot;
-
         readonly string _output = "audio.raw";
         bool _talkingBot = false;
 
@@ -33,7 +31,6 @@ namespace Chatbot
                 Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
             }, 0, 3) ; 
 
-
             Out = new WaveOut();
             In = new WaveIn();
 
@@ -42,11 +39,6 @@ namespace Chatbot
             _bwp = new BufferedWaveProvider(In.WaveFormat);
             _bwp.DiscardOnBufferOverflow = true;
         }        
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-           
-        }
 
         // user message button click event
         private void messageButton_Click(object sender, EventArgs e)
@@ -138,7 +130,7 @@ namespace Chatbot
         public Task BotResponse(string response)
         {
             SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
-            //Thread.Sleep(10000);
+
             if (response != null)
             {
                 _messageBot = response;

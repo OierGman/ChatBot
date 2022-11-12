@@ -32,13 +32,10 @@
             this.userInputBox = new System.Windows.Forms.TextBox();
             this.messageButton = new System.Windows.Forms.Button();
             this.chatLogTable = new System.Windows.Forms.TableLayoutPanel();
-            this.round1 = new Chatbot.Round();
-            this.round2 = new Chatbot.Round();
             this.btnRecordVoice = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.chatLogTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // userInputBox
@@ -71,8 +68,6 @@
             this.chatLogTable.ColumnCount = 2;
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.chatLogTable.Controls.Add(this.round1, 1, 0);
-            this.chatLogTable.Controls.Add(this.round2, 1, 1);
             this.chatLogTable.Location = new System.Drawing.Point(10, 28);
             this.chatLogTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chatLogTable.Name = "chatLogTable";
@@ -83,24 +78,6 @@
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.Size = new System.Drawing.Size(459, 310);
             this.chatLogTable.TabIndex = 3;
-            // 
-            // round1
-            // 
-            this.round1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.round1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.round1.Location = new System.Drawing.Point(232, 3);
-            this.round1.Multiline = true;
-            this.round1.Name = "round1";
-            this.round1.Size = new System.Drawing.Size(224, 71);
-            this.round1.TabIndex = 0;
-            // 
-            // round2
-            // 
-            this.round2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.round2.Location = new System.Drawing.Point(232, 80);
-            this.round2.Name = "round2";
-            this.round2.Size = new System.Drawing.Size(224, 23);
-            this.round2.TabIndex = 1;
             // 
             // btnRecordVoice
             // 
@@ -163,8 +140,6 @@
             this.MinimumSize = new System.Drawing.Size(498, 495);
             this.Name = "Form1";
             this.Text = "Chatty";
-            this.chatLogTable.ResumeLayout(false);
-            this.chatLogTable.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -179,7 +154,5 @@
         private Label label1;
         private Label label2;
         private Panel panel1;
-        private Round round1;
-        private Round round2;
     }
 }

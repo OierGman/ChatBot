@@ -116,6 +116,11 @@ namespace Chatbot
                 BotResponse("Ok, I will stop speaking to you");
                 _talkingBot = false;
             }
+            else if (messageText.Contains("word") && messageText.Contains("day"))
+            {
+                await ChatBotEngine.Word();
+                //await ChatBotEngine.GetDef(APIObjects.Word.word)
+            }
             else if (messageText.Contains("bank holiday"))
             {
                 await ChatBotEngine.BankHolidays();

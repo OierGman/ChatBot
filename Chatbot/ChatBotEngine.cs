@@ -1,8 +1,11 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Helpers;
 
 namespace Chatbot
 {
@@ -94,5 +97,40 @@ namespace Chatbot
 
 
         }
+        /// <summary>
+        /// word api implementation
+        /// </summary>
+        /// <returns></returns>
+        public static async Task Word()
+        {
+            APIObjects.Word.word.Clear();
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://random-word-api.herokuapp.com/word");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            APIObjects.Word.Root wordDeserializedClass = JsonSerializer.Deserialize<APIObjects.Word.Root>(responseBody);
+
+            APIObjects.Word.word.Add(wordDeserializedClass);
+        }
+
+        public static async Task GetDef(string s)
+        {
+            APIObjects.Definitions.definitions.Clear();
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://wordsapiv1.p.mashape.com/words/" + HttpUtility.UrlEncode(s) + "/definitions");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            APIObjects.Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<APIObjects.Definitions.Root>(responseBody);
+
+            APIObjects.Definitions.definitions.Add(defDeserializedClass);
+        }
+
+
+
+
     }
 }

@@ -122,16 +122,34 @@ namespace Chatbot
         /// <returns></returns>
         public static async Task GetDef(string s)
         {
-            APIObjects.Definitions.definitions.Clear();
-
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync("https://wordsapiv1.p.mashape.com/words/" + HttpUtility.UrlEncode(s) + "/definitions");
+            var body = "";
+            var client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri("https://wordsapiv1.p.rapidapi.com/words/" + s + "/definitions"),
+                Headers =
+                {
+                    { "X-RapidAPI-Key", "07adbb3e58msh8ae9c0438cba56ep1ff48bjsn86c5503b3e35" },
+                    { "X-RapidAPI-Host", "wordsapiv1.p.rapidapi.com" },
+                },
+            };
+            
+            using (var response0 = await client.SendAsync(request))
+            {
+                response0.EnsureSuccessStatusCode();
+                body = await response0.Content.ReadAsStringAsync();
+            }
+            
+            APIObjects.Definitions.defs.Clear();
+            /*
+            HttpResponseMessage response = await client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
-
-            APIObjects.Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<APIObjects.Definitions.Root>(responseBody);
-
-            APIObjects.Definitions.definitions.Add(defDeserializedClass);
+            */
+            APIObjects.Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<APIObjects.Definitions.Root>(body);
+            
+            APIObjects.Definitions.defs.Add(defDeserializedClass);
         }
 
 

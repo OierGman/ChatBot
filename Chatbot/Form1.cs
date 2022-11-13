@@ -119,7 +119,25 @@ namespace Chatbot
             else if (messageText.Contains("word") && messageText.Contains("day"))
             {
                 await ChatBotEngine.Word();
-                //await ChatBotEngine.GetDef(APIObjects.Word.word)
+                //await ChatBotEngine.GetDef("pie");
+
+                while (true)
+                {
+                    await ChatBotEngine.Word();
+
+                    try
+                    {
+                        await ChatBotEngine.GetDef(APIObjects.Word.word[0]);
+                        Console.WriteLine(APIObjects.Definitions.defs[0].definitions[0].definition);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+                BotResponse(APIObjects.Word.word[0]);
+                BotResponse(APIObjects.Definitions.defs[0].definitions[0].definition);
             }
             else if (messageText.Contains("bank holiday"))
             {

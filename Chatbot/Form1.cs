@@ -139,6 +139,11 @@ namespace Chatbot
                 BotResponse(APIObjects.Word.word[0]);
                 BotResponse(APIObjects.Definitions.defs[0].definitions[0].definition);
             }
+            else if (messageText.Contains("timer"))
+            {
+                AlarmTimer x = new AlarmTimer();
+                x.Show();
+            }
             else if (messageText.Contains("bank holiday"))
             {
                 await ChatBotEngine.BankHolidays();

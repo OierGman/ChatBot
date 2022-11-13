@@ -94,6 +94,10 @@ namespace Chatbot
             string responseTitle = searchListResponse.Items[0].Snippet.Title;
             return responseTitle;
         }
+        /// <summary>
+        /// word api implementation
+        /// </summary>
+        /// <returns></returns>
         public static async Task Word()
         {
             APIObjects.Word.word.Clear();

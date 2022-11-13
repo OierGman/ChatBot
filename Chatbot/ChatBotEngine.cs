@@ -110,11 +110,16 @@ namespace Chatbot
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            APIObjects.Word.Root wordDeserializedClass = JsonSerializer.Deserialize<APIObjects.Word.Root>(responseBody);
+            Regex reg = new Regex("[^a-zA-Z']");
+            string result = reg.Replace(responseBody, string.Empty);
 
-            APIObjects.Word.word.Add(wordDeserializedClass);
+            APIObjects.Word.word.Add(result);
         }
-
+        /// <summary>
+        /// definitions api implementation
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static async Task GetDef(string s)
         {
             APIObjects.Definitions.definitions.Clear();

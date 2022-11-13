@@ -107,9 +107,23 @@ namespace Chatbot
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            APIObjects.Word.Root chatDeserializedClass = JsonSerializer.Deserialize<APIObjects.Word.Root>(responseBody);
+            APIObjects.Word.Root wordDeserializedClass = JsonSerializer.Deserialize<APIObjects.Word.Root>(responseBody);
 
-            APIObjects.Word.word.Add(chatDeserializedClass);
+            APIObjects.Word.word.Add(wordDeserializedClass);
+        }
+
+        public static async Task GetDef(string s)
+        {
+            APIObjects.Definitions.definitions.Clear();
+
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://wordsapiv1.p.mashape.com/words/" + HttpUtility.UrlEncode(s) + "/definitions");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            APIObjects.Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<APIObjects.Definitions.Root>(responseBody);
+
+            APIObjects.Definitions.definitions.Add(defDeserializedClass);
         }
 
 

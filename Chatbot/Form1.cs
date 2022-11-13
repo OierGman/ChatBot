@@ -36,8 +36,8 @@ namespace Chatbot
                 BackColor = Color.LimeGreen,
                 TextAlign = HorizontalAlignment.Center,
                 Dock = DockStyle.Fill,
-                Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
-                }, 0, 3) ; 
+                Text = "\r\n" + "Hello! I'm Chatty, your personal assistant! How can I help?"
+            }, 0, 3) ; 
 
             Out = new WaveOut();
             In = new WaveIn();
@@ -84,7 +84,7 @@ namespace Chatbot
                 TextAlign = HorizontalAlignment.Center,
                 Size = new Size(224, 71),
                 BackColor = Color.LimeGreen,
-                Text = userInputBox.Text
+                Text = "\r\n" + userInputBox.Text
             }, 1);
 
             ChatDecider(userInputBox.Text);
@@ -159,11 +159,13 @@ namespace Chatbot
             else if (messageText.Contains("task"))
             {
                 ToDoList();
+                userInputBox.Text = "";
             }
             // search for a combination of keywords to display to do list
             else if (messageText.Contains("show") && messageText.Contains("to do"))
             {
                 ShowToDoList();
+                userInputBox.Text = "";
             }
             else
             {
@@ -204,8 +206,9 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = TaskHolder
+                    Text = "\r\n" + TaskHolder
                 }, 0);
+                userInputBox.Text = "";
             }
             
         }
@@ -225,8 +228,9 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = "What would you like to call this task?"
+                    Text = "\r\n" + "What would you like to call this task?"
                 }, 0);
+                userInputBox.Text = "";
             }
             else if (count == 1)
             {
@@ -240,7 +244,7 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = userInputBox.Text
+                    Text = "\r\n" + userInputBox.Text
                 }, 1);
 
                 ChatLogController(new Round()
@@ -252,7 +256,7 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = "When is this task due?"
+                    Text = "\r\n" + "When is this task due?"
                 }, 0);
 
                 userInputBox.Text = "";
@@ -273,7 +277,7 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = userInputBox.Text
+                    Text = "\r\n" + userInputBox.Text
                 }, 1);
                 userInputBox.Text = "";
 
@@ -286,9 +290,10 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = "Task Added successfully!"
+                    Text = "\r\n" + "Task Added successfully!"
                 }, 0);
                 TaskCheck = false;
+                userInputBox.Text = "";
             }
             ++count;
         }
@@ -314,7 +319,7 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),//224,71,
                     BackColor = Color.LimeGreen,
-                    Text = response
+                    Text = "\r\n" + response
                 }, 0);
             }
             else
@@ -331,7 +336,7 @@ namespace Chatbot
                         TextAlign = HorizontalAlignment.Center,
                         Size = new Size(224, 71),//224,71,
                         BackColor = Color.LimeGreen,
-                        Text = "Sorry, I do not understand, could you ask me differently?"
+                        Text = "\r\n" + "Sorry, I do not understand, could you ask me differently?"
                     }, 0);
                 }
                 else
@@ -346,7 +351,7 @@ namespace Chatbot
                         TextAlign = HorizontalAlignment.Center,
                         Size = new Size(224, 71),//224,71,
                         BackColor = Color.LimeGreen,
-                        Text = MrChat.chat[0].result
+                        Text = "\r\n" + MrChat.chat[0].result
                     }, 0);
                 }
             }
@@ -518,14 +523,7 @@ namespace Chatbot
                     }
                 }
             }
-
             messageButton_Click(this, e);
         }
-
-        private void round1_TextChanged(object sender, EventArgs e)
-        {
-            Round message = new Round();
-        }
-
     }
 }

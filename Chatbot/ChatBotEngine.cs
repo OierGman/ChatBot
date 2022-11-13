@@ -1,8 +1,11 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 using System.Diagnostics;
+using System.Net;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Helpers;
 
 namespace Chatbot
 {
@@ -91,5 +94,30 @@ namespace Chatbot
             string responseTitle = searchListResponse.Items[0].Snippet.Title;
             return responseTitle;
         }
+
+        private void btnGetWord_Click(object sender, EventArgs e)
+        {
+            GetWord();
+        }
+        public void GetWord()
+        {
+            try
+            {
+                using (WebClient web = new WebClient())
+                {
+                    string url = String.Format(https://random-word-api.herokuapp.com/word);
+                    var Json = web.DownloadString(url);
+                    Regex reg = new Regex("[^a-zA-Z']");
+                    string result = reg.Replace(json, string.Empty);
+                    lblRandomWord.Text = result;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+
     }
 }

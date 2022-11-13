@@ -1,34 +1,44 @@
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
+using Google.Type;
 using NAudio.Wave;
+
 using System.Speech.Synthesis;
+using Color = System.Drawing.Color;
 
 namespace Chatbot
 {
     public partial class Form1 : Form
     {
+
+        String TaskHolder;
+        List<String> TaskList = new List<String>();
+        bool TaskCheck = false;
+        int count = 0;
+        String Task;
         private BufferedWaveProvider _bwp;
         public WaveIn In { get; private set; }
         public WaveOut Out { get; private set; }
-
         private WaveFileWriter _writer;
-
-        TextBox _message = new TextBox();
-        TextBox _messageBot = new TextBox();
-
+        string _messageBot;
         readonly string _output = "audio.raw";
+        bool _talkingBot = false;
 
         public Form1()
         {
             InitializeComponent();
             // initialize with welcome chatbot message
-            chatLogTable.Controls.Add(new TextBox()
+            chatLogTable.Controls.Add(new Round()
             {
                 ReadOnly = true,
                 Multiline = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.LimeGreen,
+                TextAlign = HorizontalAlignment.Center,
                 Dock = DockStyle.Fill,
-                Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
-            }, 0, 3);
+                Text = "\r\n" + "Hello! I'm Chatty, your personal assistant! How can I help?"
+            }, 0, 3) ; 
+
             Out = new WaveOut();
             In = new WaveIn();
 
@@ -37,36 +47,104 @@ namespace Chatbot
             _bwp = new BufferedWaveProvider(In.WaveFormat);
             _bwp.DiscardOnBufferOverflow = true;
         }
-        // user message button click event
-        private void messageButton_Click(object sender, EventArgs e)
+        
+        public void Form1_Load(object sender, EventArgs e)
         {
-            _message.ReadOnly = true;
-            _message.Dock = DockStyle.Fill;
-            _message.Multiline = true;
-            _message.Text = userInputBox.Text;
-            if (_message.Text == "")
+            #region TaskDummyData
+            TaskList.Add("Prepare for OOP Mocks, 05/12/22");
+            TaskList.Add("Complete Database Logbooks, 16/12/22");
+            TaskList.Add("Complete OOP Assignment 1, 10/01/23");
+            #endregion
+        }
+
+        // user message button click event
+        public void messageButton_Click(object sender, EventArgs e)
+        {
+            if (TaskCheck == true)
+            {
+                ToDoList();
+            }
+            
+            
+            if (userInputBox.Text == "")
             {
                 return;
-            } else if (_message.Text == "Say something")
+            } 
+            else if (userInputBox.Text == "Say something")
             {
                 return;
             }
+          
+            ChatLogController(new Round()
+            {
+                ReadOnly = true,
+                Multiline = true,
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                TextAlign = HorizontalAlignment.Center,
+                Size = new Size(224, 71),
+                BackColor = Color.LimeGreen,
+                Text = "\r\n" + userInputBox.Text
+            }, 1);
 
-            userInputBox.Text = "";
-            ChatLogController(_message, 1);
-            ChatDecider(_message.Text);
+            ChatDecider(userInputBox.Text);
+            // userInputBox.Text = "";
         }
+        
         /// <summary>
-        /// The user input is filtered, and tasks/methods called by depending on keywords.
+        /// The user input is filtered, and tasks/methods called depending on keywords.
         /// </summary>
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
-            if (messageText.Contains("play") || messageText.Contains("Play"))
+
+            // convert user input to lower case to remove capitilisation errors 
+            messageText = messageText.ToLower();
+
+            if (messageText.Contains("play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
-            } else if (messageText.Contains("bank holiday"))
+            } 
+            else if (messageText.Contains("speak to me"))
+            {
+                _talkingBot = true;
+                BotResponse("Ok, I will start speaking to you");
+            }
+            else if (messageText.Contains("stop speaking"))
+            {
+                BotResponse("Ok, I will stop speaking to you");
+                _talkingBot = false;
+            }
+            else if (messageText.Contains("word") && messageText.Contains("day"))
+            {
+                await ChatBotEngine.Word();
+                //await ChatBotEngine.GetDef("pie");
+
+                while (true)
+                {
+                    await ChatBotEngine.Word();
+
+                    try
+                    {
+                        await ChatBotEngine.GetDef(APIObjects.Word.word[0]);
+                        Console.WriteLine(APIObjects.Definitions.defs[0].definitions[0].definition);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+                BotResponse(APIObjects.Word.word[0]);
+                BotResponse(APIObjects.Definitions.defs[0].definitions[0].definition);
+            }
+            else if (messageText.Contains("timer"))
+            {
+                AlarmTimer x = new AlarmTimer();
+                x.Show();
+            }
+            else if (messageText.Contains("bank holiday"))
             {
                 await ChatBotEngine.BankHolidays();
                 string str = null;
@@ -76,6 +154,18 @@ namespace Chatbot
                 }
                 BotResponse("Here are all the confirmed bank holidays I know of");
                 MessageBox.Show(str);
+            }
+            // search user input for to do list key words in order to add TaskCheck 
+            else if (messageText.Contains("task"))
+            {
+                ToDoList();
+                userInputBox.Text = "";
+            }
+            // search for a combination of keywords to display to do list
+            else if (messageText.Contains("show") && messageText.Contains("to do"))
+            {
+                ShowToDoList();
+                userInputBox.Text = "";
             }
             else
             {
@@ -98,7 +188,117 @@ namespace Chatbot
                     }
                 }
             }
+
         }
+
+        private void ShowToDoList()
+        {
+            int TaskCount = TaskList.Count;
+            for (int i = 0; i < TaskCount; i++)
+            {
+                TaskHolder = TaskList[i].ToString();
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + TaskHolder
+                }, 0);
+                userInputBox.Text = "";
+            }
+            
+        }
+
+        public async void ToDoList()
+        {
+            TaskCheck = true;
+
+            if (count == 0)
+            {
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + "What would you like to call this task?"
+                }, 0);
+                userInputBox.Text = "";
+            }
+            else if (count == 1)
+            {
+                Task = userInputBox.Text;
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + userInputBox.Text
+                }, 1);
+
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + "When is this task due?"
+                }, 0);
+
+                userInputBox.Text = "";
+
+            }
+            else if (count == 2)
+            {
+                Task = Task + ", " + userInputBox.Text;
+                TaskList.Add(Task);
+
+
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + userInputBox.Text
+                }, 1);
+                userInputBox.Text = "";
+
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + "Task Added successfully!"
+                }, 0);
+                TaskCheck = false;
+                userInputBox.Text = "";
+            }
+            ++count;
+        }
+       
+
         /// <summary>
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>
@@ -106,31 +306,61 @@ namespace Chatbot
         public Task BotResponse(string response)
         {
             SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
-            _messageBot.ReadOnly = true;
-            _messageBot.Dock = DockStyle.Fill;
-            _messageBot.Multiline = true;
 
             if (response != null)
             {
-                _messageBot.Text = response;
-                ChatLogController(_messageBot, 0);
+                _messageBot = response;
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),//224,71,
+                    BackColor = Color.LimeGreen,
+                    Text = "\r\n" + response
+                }, 0);
             }
             else
             {
                 if (MrChat.chat[0].result == null)
                 {
-                    _messageBot.Text = "Sorry, I do not understand, could you ask me differently?";
-                    ChatLogController(_messageBot, 0);
+                    // _messageBot = "Sorry, I do not understand, could you ask me differently?";
+                    ChatLogController(new Round()
+                    {
+                        ReadOnly = true,
+                        Multiline = true,
+                        Dock = DockStyle.Fill,
+                        BorderStyle = BorderStyle.None,
+                        TextAlign = HorizontalAlignment.Center,
+                        Size = new Size(224, 71),//224,71,
+                        BackColor = Color.LimeGreen,
+                        Text = "\r\n" + "Sorry, I do not understand, could you ask me differently?"
+                    }, 0);
                 }
                 else
                 {
-                    _messageBot.Text = MrChat.chat[0].result;
-                    ChatLogController(_messageBot, 0);
+                    _messageBot = MrChat.chat[0].result;
+                    ChatLogController(new Round()
+                    {
+                        ReadOnly = true,
+                        Multiline = true,
+                        Dock = DockStyle.Fill,
+                        BorderStyle = BorderStyle.None,
+                        TextAlign = HorizontalAlignment.Center,
+                        Size = new Size(224, 71),//224,71,
+                        BackColor = Color.LimeGreen,
+                        Text = "\r\n" + MrChat.chat[0].result
+                    }, 0);
                 }
             }
-            speechSynthesis.Speak(_messageBot.Text);
-
-            return Task.CompletedTask;
+            if (_talkingBot == true)
+            {
+                speechSynthesis.Speak(_messageBot);
+            }
+            userInputBox.Text = "";
+            return null;
         }
         /// <summary>
         /// This method takes a string and parses to the youtube api, returns title of video, as well as opening youtube link via Task.
@@ -153,15 +383,15 @@ namespace Chatbot
         /// </summary>
         /// <param name="message">A message as a Textbox</param>
         /// <param name="i">Index of message.</param>
-        private void ChatLogController(TextBox message, int i)
+        private void ChatLogController(Round message, int i)
         {
-            var botMessageOne = chatLogTable.GetControlFromPosition(0, 3);
-            var botMessageTwo = chatLogTable.GetControlFromPosition(0, 2);
-            var botMessageThree = chatLogTable.GetControlFromPosition(0, 1);
+            var botMessageOne = (Round)chatLogTable.GetControlFromPosition(0, 3);
+            var botMessageTwo = (Round)chatLogTable.GetControlFromPosition(0, 2);
+            var botMessageThree = (Round)chatLogTable.GetControlFromPosition(0, 1);
             chatLogTable.Controls.Remove(chatLogTable.GetControlFromPosition(0, 0));
-            var userMessageOne = chatLogTable.GetControlFromPosition(1, 3);
-            var userMessageTwo = chatLogTable.GetControlFromPosition(1, 2);
-            var userMessageThree = chatLogTable.GetControlFromPosition(1, 1);
+            var userMessageOne = (Round)chatLogTable.GetControlFromPosition(1, 3);
+            var userMessageTwo = (Round)chatLogTable.GetControlFromPosition(1, 2);
+            var userMessageThree = (Round)chatLogTable.GetControlFromPosition(1, 1);
             chatLogTable.Controls.Remove(chatLogTable.GetControlFromPosition(1, 0));
             // no 1 2, 0 3, 0 2, 0 0
             chatLogTable.Controls.Clear();
@@ -173,7 +403,6 @@ namespace Chatbot
             {
 
             }
-
             try
             {
                 chatLogTable.Controls.Add(botMessageTwo, 0, 1);
@@ -198,7 +427,6 @@ namespace Chatbot
             {
 
             }
-
             try
             {
                 chatLogTable.Controls.Add(userMessageTwo, 1, 1);
@@ -215,9 +443,9 @@ namespace Chatbot
             {
 
             }
-
             chatLogTable.Controls.Add(message, i, 3);
         }
+
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
             _bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
@@ -295,7 +523,6 @@ namespace Chatbot
                     }
                 }
             }
-
             messageButton_Click(this, e);
         }
     }

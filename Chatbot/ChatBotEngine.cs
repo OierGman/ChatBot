@@ -94,29 +94,21 @@ namespace Chatbot
             string responseTitle = searchListResponse.Items[0].Snippet.Title;
             return responseTitle;
         }
+        public static async Task Word()
+        {
+            APIObjects.Word.word.Clear();
 
-        private void btnGetWord_Click(object sender, EventArgs e)
-        {
-            GetWord();
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync("https://random-word-api.herokuapp.com/word");
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            APIObjects.Word.Root chatDeserializedClass = JsonSerializer.Deserialize<APIObjects.Word.Root>(responseBody);
+
+            APIObjects.Word.word.Add(chatDeserializedClass);
         }
-        public void GetWord()
-        {
-            try
-            {
-                using (WebClient web = new WebClient())
-                {
-                    string url = String.Format(https://random-word-api.herokuapp.com/word);
-                    var Json = web.DownloadString(url);
-                    Regex reg = new Regex("[^a-zA-Z']");
-                    string result = reg.Replace(json, string.Empty);
-                    lblRandomWord.Text = result;
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-        }
+
+
 
 
     }

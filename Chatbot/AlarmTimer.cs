@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace Chatbot
+﻿namespace Chatbot
 {
     public partial class AlarmTimer : Form
     {
@@ -63,7 +53,7 @@ namespace Chatbot
         {
             TimerCountLabel.Text = seconds--.ToString();
 
-            if(seconds <= 0)
+            if (seconds <= 0)
             {
                 timer1.Stop();
                 TimerTextBox.Enabled = true;

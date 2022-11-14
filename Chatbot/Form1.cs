@@ -1,6 +1,5 @@
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
-using Google.Type;
 using NAudio.Wave;
 
 using System.Speech.Synthesis;
@@ -11,17 +10,17 @@ namespace Chatbot
     public partial class Form1 : Form
     {
 
-        String TaskHolder;
-        List<String> TaskList = new List<String>();
-        bool TaskCheck = false;
-        int count = 0;
-        String Task;
+        string _taskHolder;
+        List<string> _taskList = new List<string>();
+        bool _taskCheck = false;
+        int _count = 0;
+        string _task;
         private BufferedWaveProvider _bwp;
         public WaveIn In { get; private set; }
         public WaveOut Out { get; private set; }
         private WaveFileWriter _writer;
         string _messageBot;
-        readonly string _output = "audio.raw";
+        private const string _output = "audio.raw";
         bool _talkingBot = false;
 
         public Form1()
@@ -37,7 +36,7 @@ namespace Chatbot
                 TextAlign = HorizontalAlignment.Center,
                 Dock = DockStyle.Fill,
                 Text = "\r\n" + "Hello! I'm Chatty, your personal assistant! How can I help?"
-            }, 0, 3) ; 
+            }, 0, 3);
 
             Out = new WaveOut();
             In = new WaveIn();
@@ -47,34 +46,25 @@ namespace Chatbot
             _bwp = new BufferedWaveProvider(In.WaveFormat);
             _bwp.DiscardOnBufferOverflow = true;
         }
-        
-        public void Form1_Load(object sender, EventArgs e)
-        {
-            #region TaskDummyData
-            TaskList.Add("Prepare for OOP Mocks, 05/12/22");
-            TaskList.Add("Complete Database Logbooks, 16/12/22");
-            TaskList.Add("Complete OOP Assignment 1, 10/01/23");
-            #endregion
-        }
 
         // user message button click event
         public void messageButton_Click(object sender, EventArgs e)
         {
-            if (TaskCheck == true)
+            if (_taskCheck)
             {
                 ToDoList();
             }
-            
-            
+
+
             if (userInputBox.Text == "")
             {
                 return;
-            } 
+            }
             else if (userInputBox.Text == "Say something")
             {
                 return;
             }
-          
+
             ChatLogController(new Round()
             {
                 ReadOnly = true,
@@ -90,7 +80,7 @@ namespace Chatbot
             ChatDecider(userInputBox.Text);
             // userInputBox.Text = "";
         }
-        
+
         /// <summary>
         /// The user input is filtered, and tasks/methods called depending on keywords.
         /// </summary>
@@ -105,7 +95,7 @@ namespace Chatbot
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
-            } 
+            }
             else if (messageText.Contains("speak to me"))
             {
                 _talkingBot = true;
@@ -193,10 +183,10 @@ namespace Chatbot
 
         private void ShowToDoList()
         {
-            int TaskCount = TaskList.Count;
-            for (int i = 0; i < TaskCount; i++)
+            int taskCount = _taskList.Count;
+            for (int i = 0; i < taskCount; i++)
             {
-                TaskHolder = TaskList[i].ToString();
+                _taskHolder = _taskList[i].ToString();
                 ChatLogController(new Round()
                 {
                     ReadOnly = true,
@@ -206,18 +196,18 @@ namespace Chatbot
                     TextAlign = HorizontalAlignment.Center,
                     Size = new Size(224, 71),
                     BackColor = Color.LimeGreen,
-                    Text = "\r\n" + TaskHolder
+                    Text = "\r\n" + _taskHolder
                 }, 0);
                 userInputBox.Text = "";
             }
-            
+
         }
 
-        public async void ToDoList()
+        public void ToDoList()
         {
-            TaskCheck = true;
+            _taskCheck = true;
 
-            if (count == 0)
+            if (_count == 0)
             {
                 ChatLogController(new Round()
                 {
@@ -232,9 +222,9 @@ namespace Chatbot
                 }, 0);
                 userInputBox.Text = "";
             }
-            else if (count == 1)
+            else if (_count == 1)
             {
-                Task = userInputBox.Text;
+                _task = userInputBox.Text;
                 ChatLogController(new Round()
                 {
                     ReadOnly = true,
@@ -262,10 +252,10 @@ namespace Chatbot
                 userInputBox.Text = "";
 
             }
-            else if (count == 2)
+            else if (_count == 2)
             {
-                Task = Task + ", " + userInputBox.Text;
-                TaskList.Add(Task);
+                _task = _task + ", " + userInputBox.Text;
+                _taskList.Add(_task);
 
 
                 ChatLogController(new Round()
@@ -292,12 +282,12 @@ namespace Chatbot
                     BackColor = Color.LimeGreen,
                     Text = "\r\n" + "Task Added successfully!"
                 }, 0);
-                TaskCheck = false;
+                _taskCheck = false;
                 userInputBox.Text = "";
             }
-            ++count;
+            ++_count;
         }
-       
+
 
         /// <summary>
         /// Chatty will respond with a result, depending on which method called it.
@@ -355,7 +345,7 @@ namespace Chatbot
                     }, 0);
                 }
             }
-            if (_talkingBot == true)
+            if (_talkingBot)
             {
                 speechSynthesis.Speak(_messageBot);
             }

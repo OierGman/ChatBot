@@ -1,11 +1,9 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
 using System.Diagnostics;
-using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Web.Helpers;
 
 namespace Chatbot
 {
@@ -134,13 +132,13 @@ namespace Chatbot
                     { "X-RapidAPI-Host", "wordsapiv1.p.rapidapi.com" },
                 },
             };
-            
+
             using (var response0 = await client.SendAsync(request))
             {
                 response0.EnsureSuccessStatusCode();
                 body = await response0.Content.ReadAsStringAsync();
             }
-            
+
             APIObjects.Definitions.defs.Clear();
             /*
             HttpResponseMessage response = await client.GetAsync(requestUri);
@@ -148,7 +146,7 @@ namespace Chatbot
             string responseBody = await response.Content.ReadAsStringAsync();
             */
             APIObjects.Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<APIObjects.Definitions.Root>(body);
-            
+
             APIObjects.Definitions.defs.Add(defDeserializedClass);
         }
 

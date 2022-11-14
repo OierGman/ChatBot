@@ -135,6 +135,7 @@ namespace Chatbot
             {
                 AlarmTimer x = new AlarmTimer();
                 x.Show();
+                // clear input & return message
             }
             else if (messageText.Contains("bank holiday"))
             {
@@ -295,7 +296,7 @@ namespace Chatbot
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>
         /// <param name="response">Response from method call.</param>
-        public Task BotResponse(string response)
+        public Task? BotResponse(string response)
         {
             SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
 
@@ -366,6 +367,21 @@ namespace Chatbot
                             BackColor = Color.LightBlue,
                             Text = "\r\n" + z
                         }, 0);
+                    }
+                    else
+                    {
+                        ChatLogController(new Round
+                        {
+                            ReadOnly = true,
+                            Multiline = true,
+                            Dock = DockStyle.Fill,
+                            BorderStyle = BorderStyle.None,
+                            TextAlign = HorizontalAlignment.Center,
+                            Size = new Size(257, 97),//224,71,
+                            BackColor = Color.LightBlue,
+                            Text = "\r\n" + MrChat.Chat[0].result
+                        }, 0);
+                        Console.WriteLine(MrChat.Chat[0].result.Length);
                     }
                     /*
                     ChatLogController(new Round

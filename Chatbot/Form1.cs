@@ -318,7 +318,7 @@ namespace Chatbot
             {
                 if (MrChat.Chat[0].result == null)
                 {
-                    // _messageBot = "Sorry, I do not understand, could you ask me differently?";
+                    _messageBot = "Sorry, I do not understand, could you ask me differently?";
                     ChatLogController(new Round
                     {
                         ReadOnly = true,
@@ -336,11 +336,11 @@ namespace Chatbot
                     _messageBot = MrChat.Chat[0].result;
                     if (MrChat.Chat[0].result.Length > 100)
                     {
-                        string i = MrChat.Chat[0].result.Substring(100);
+                        string i = MrChat.Chat[0].result.Substring(95);
                         //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
                         int x = i.IndexOf(' ');
-                        string y = MrChat.Chat[0].result.Substring(0, 100 + x);
-                        string z = MrChat.Chat[0].result.Substring(100 + x);
+                        string y = MrChat.Chat[0].result.Substring(0, 95 + x);
+                        string z = MrChat.Chat[0].result.Substring(95 + x);
                         Console.WriteLine(y);
                         Console.WriteLine(z);
                         ChatLogController(new Round

@@ -47,21 +47,21 @@ namespace Chatbot
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            _seconds = Convert.ToInt32(TimerTextBox.Text);
-            TimerTextBox.Enabled = false;
-            timer1.Start();
-        }
-
-        private void TimerButton_Click(object sender, EventArgs e)
-        {
             TimerCountLabel.Text = _seconds--.ToString();
 
-            if (_seconds <= 0)
+            if (_seconds < 0)
             {
                 timer1.Stop();
                 TimerTextBox.Enabled = true;
                 MessageBox.Show("Ring Ring Ring");
             }
+        }
+
+        private void TimerButton_Click(object sender, EventArgs e)
+        {
+             _seconds = Convert.ToInt32(TimerTextBox.Text);
+            TimerTextBox.Enabled = false;
+            timer1.Start();
         }
     }
 }

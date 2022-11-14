@@ -4,7 +4,7 @@ namespace Chatbot.APIObjects
 {
     internal class BankHolidays
     {
-        public static List<BankHolidays.Event> bankHolidays = new List<BankHolidays.Event>();
+        public static List<Event> bankHolidays = new List<Event>();
 
         // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
         public class EnglandAndWales

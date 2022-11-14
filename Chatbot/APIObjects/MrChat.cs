@@ -4,7 +4,7 @@ namespace Chatbot.APIObjects
 {
     internal class MrChat
     {
-        public static List<MrChat.Root> chat = new List<MrChat.Root>();
+        public static List<MrChat.Root> Chat = new List<MrChat.Root>();
         // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
         public class Root
         {

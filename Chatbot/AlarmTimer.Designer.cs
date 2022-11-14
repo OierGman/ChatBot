@@ -1,11 +1,14 @@
-﻿namespace Chatbot
+﻿using System.ComponentModel;
+using Timer = System.Windows.Forms.Timer;
+
+namespace Chatbot
 {
     partial class AlarmTimer
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -157,7 +160,7 @@
         private Label TimerCountLabel;
         private Button TimerButton;
         private TextBox TimerTextBox;
-        private System.Windows.Forms.Timer timer1;
+        private Timer timer1;
         private DateTimePicker AlarmTimePicker;
         private Label AlarmLabel;
         private Button SetAlarmButton;

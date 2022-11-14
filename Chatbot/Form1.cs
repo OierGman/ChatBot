@@ -1,19 +1,16 @@
+using System.Speech.Synthesis;
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
 using NAudio.Wave;
-
-using System.Speech.Synthesis;
-using Color = System.Drawing.Color;
 
 namespace Chatbot
 {
     public partial class Form1 : Form
     {
-
-        string _taskHolder;
-        List<string> _taskList = new List<string>();
-        bool _taskCheck = false;
-        int _count = 0;
+        private string _taskHolder;
+        private readonly List<string> _taskList = new List<string>();
+        bool _taskCheck;
+        int _count;
         string _task;
         private BufferedWaveProvider _bwp;
         public WaveIn In { get; private set; }
@@ -21,13 +18,13 @@ namespace Chatbot
         private WaveFileWriter _writer;
         string _messageBot;
         private const string _output = "audio.raw";
-        bool _talkingBot = false;
+        bool _talkingBot;
 
         public Form1()
         {
             InitializeComponent();
             // initialize with welcome chatbot message
-            chatLogTable.Controls.Add(new Round()
+            chatLogTable.Controls.Add(new Round
             {
                 ReadOnly = true,
                 Multiline = true,
@@ -43,8 +40,10 @@ namespace Chatbot
 
             In.DataAvailable += waveIn_DataAvailable;
             In.WaveFormat = new WaveFormat(16000, 1);
-            _bwp = new BufferedWaveProvider(In.WaveFormat);
-            _bwp.DiscardOnBufferOverflow = true;
+            _bwp = new BufferedWaveProvider(In.WaveFormat)
+            {
+                DiscardOnBufferOverflow = true
+            };
         }
 
         // user message button click event
@@ -60,12 +59,13 @@ namespace Chatbot
             {
                 return;
             }
-            else if (userInputBox.Text == "Say something")
+
+            if (userInputBox.Text == "Say something")
             {
                 return;
             }
 
-            ChatLogController(new Round()
+            ChatLogController(new Round
             {
                 ReadOnly = true,
                 Multiline = true,
@@ -117,8 +117,8 @@ namespace Chatbot
 
                     try
                     {
-                        await ChatBotEngine.GetDef(APIObjects.Word.word[0]);
-                        Console.WriteLine(APIObjects.Definitions.defs[0].definitions[0].definition);
+                        await ChatBotEngine.GetDef(Word.word[0]);
+                        Console.WriteLine(Definitions.Defs[0].definitions[0].definition);
                         break;
                     }
                     catch (Exception ex)
@@ -126,8 +126,8 @@ namespace Chatbot
 
                     }
                 }
-                BotResponse(APIObjects.Word.word[0]);
-                BotResponse(APIObjects.Definitions.defs[0].definitions[0].definition);
+                BotResponse(Word.word[0]);
+                BotResponse(Definitions.Defs[0].definitions[0].definition);
             }
             else if (messageText.Contains("timer"))
             {
@@ -159,7 +159,7 @@ namespace Chatbot
             }
             else
             {
-                if (MrChat.chat.Count == 0)
+                if (MrChat.Chat.Count == 0)
                 {
                     await ChatBotEngine.MrChat(messageText);
                     BotResponse(null);
@@ -169,7 +169,7 @@ namespace Chatbot
                     // try catch
                     try
                     {
-                        await ChatBotEngine.Converse(messageText, MrChat.chat[0].conversationID, MrChat.chat[0].host);
+                        await ChatBotEngine.Converse(messageText, MrChat.Chat[0].conversationID, MrChat.Chat[0].host);
                         BotResponse(null);
                     }
                     catch (Exception e)
@@ -186,8 +186,8 @@ namespace Chatbot
             int taskCount = _taskList.Count;
             for (int i = 0; i < taskCount; i++)
             {
-                _taskHolder = _taskList[i].ToString();
-                ChatLogController(new Round()
+                _taskHolder = _taskList[i];
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -209,7 +209,7 @@ namespace Chatbot
 
             if (_count == 0)
             {
-                ChatLogController(new Round()
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -225,7 +225,7 @@ namespace Chatbot
             else if (_count == 1)
             {
                 _task = userInputBox.Text;
-                ChatLogController(new Round()
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -237,7 +237,7 @@ namespace Chatbot
                     Text = "\r\n" + userInputBox.Text
                 }, 1);
 
-                ChatLogController(new Round()
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -258,7 +258,7 @@ namespace Chatbot
                 _taskList.Add(_task);
 
 
-                ChatLogController(new Round()
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -271,7 +271,7 @@ namespace Chatbot
                 }, 1);
                 userInputBox.Text = "";
 
-                ChatLogController(new Round()
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -300,7 +300,7 @@ namespace Chatbot
             if (response != null)
             {
                 _messageBot = response;
-                ChatLogController(new Round()
+                ChatLogController(new Round
                 {
                     ReadOnly = true,
                     Multiline = true,
@@ -314,10 +314,10 @@ namespace Chatbot
             }
             else
             {
-                if (MrChat.chat[0].result == null)
+                if (MrChat.Chat[0].result == null)
                 {
                     // _messageBot = "Sorry, I do not understand, could you ask me differently?";
-                    ChatLogController(new Round()
+                    ChatLogController(new Round
                     {
                         ReadOnly = true,
                         Multiline = true,
@@ -331,8 +331,8 @@ namespace Chatbot
                 }
                 else
                 {
-                    _messageBot = MrChat.chat[0].result;
-                    ChatLogController(new Round()
+                    _messageBot = MrChat.Chat[0].result;
+                    ChatLogController(new Round
                     {
                         ReadOnly = true,
                         Multiline = true,
@@ -341,7 +341,7 @@ namespace Chatbot
                         TextAlign = HorizontalAlignment.Center,
                         Size = new Size(224, 71),//224,71,
                         BackColor = Color.LimeGreen,
-                        Text = "\r\n" + MrChat.chat[0].result
+                        Text = "\r\n" + MrChat.Chat[0].result
                     }, 0);
                 }
             }
@@ -455,8 +455,10 @@ namespace Chatbot
             Out = new WaveOut();
             In.DataAvailable += waveIn_DataAvailable;
             In.WaveFormat = new WaveFormat(16000, 1);
-            _bwp = new BufferedWaveProvider(In.WaveFormat);
-            _bwp.DiscardOnBufferOverflow = true;
+            _bwp = new BufferedWaveProvider(In.WaveFormat)
+            {
+                DiscardOnBufferOverflow = true
+            };
             In.StartRecording();
         }
         /// <summary>
@@ -493,9 +495,9 @@ namespace Chatbot
                 string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
                 string path = Path.Combine(projectDirectory, fileName);
                 string credential_path = path;
-                System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
+                Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
                 var speech = SpeechClient.Create();
-                var response = speech.Recognize(new RecognitionConfig()
+                var response = speech.Recognize(new RecognitionConfig
                 {
                     Encoding = RecognitionConfig.Types.AudioEncoding.Linear16,
                     SampleRateHertz = 16000,

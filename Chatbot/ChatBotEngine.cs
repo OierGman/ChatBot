@@ -1,9 +1,10 @@
-﻿using Google.Apis.Services;
-using Google.Apis.YouTube.v3;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
+using Chatbot.APIObjects;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
 
 namespace Chatbot
 {
@@ -17,7 +18,7 @@ namespace Chatbot
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            APIObjects.BankHolidays.Root bankHolDeserializedClass = JsonSerializer.Deserialize<APIObjects.BankHolidays.Root>(responseBody);
+            BankHolidays.Root bankHolDeserializedClass = JsonSerializer.Deserialize<BankHolidays.Root>(responseBody);
 
             foreach (var x in bankHolDeserializedClass.EnglandAndWales.events)
             {
@@ -30,16 +31,16 @@ namespace Chatbot
         public static async Task MrChat(string s)
         {
             // oier wolfram API-Header // 2GVUAG-JERAUGG5QG //
-            APIObjects.MrChat.chat.Clear();
+            APIObjects.MrChat.Chat.Clear();
 
             HttpClient client = new HttpClient();
             HttpResponseMessage response = await client.GetAsync("http://api.wolframalpha.com/v1/conversation.jsp?appid=2GVUAG-JERAUGG5QG&input=" + HttpUtility.UrlEncode(s));
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            APIObjects.MrChat.Root chatDeserializedClass = JsonSerializer.Deserialize<APIObjects.MrChat.Root>(responseBody);
+            MrChat.Root chatDeserializedClass = JsonSerializer.Deserialize<MrChat.Root>(responseBody);
 
-            APIObjects.MrChat.chat.Add(chatDeserializedClass);
+            APIObjects.MrChat.Chat.Add(chatDeserializedClass);
         }
 
         public static async Task Converse(string s, string id, string url)
@@ -49,19 +50,19 @@ namespace Chatbot
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            APIObjects.MrChat.Root chatDeserializedClass = JsonSerializer.Deserialize<APIObjects.MrChat.Root>(responseBody);
+            MrChat.Root chatDeserializedClass = JsonSerializer.Deserialize<MrChat.Root>(responseBody);
 
-            APIObjects.MrChat.chat.Add(chatDeserializedClass);
+            APIObjects.MrChat.Chat.Add(chatDeserializedClass);
 
-            APIObjects.MrChat.chat.RemoveAt(0);
+            APIObjects.MrChat.Chat.RemoveAt(0);
         }
 
         public async Task<string> YouTubeMusic(string keyWord)
         {
-            var youtubeService = new YouTubeService(new BaseClientService.Initializer()
+            var youtubeService = new YouTubeService(new BaseClientService.Initializer
             {
                 ApiKey = "AIzaSyC_oVYtu9mGyEaNT42rylHayaVWcFyez0c",
-                ApplicationName = this.GetType().ToString()
+                ApplicationName = GetType().ToString()
             });
 
             var searchListRequest = youtubeService.Search.List("snippet");
@@ -80,7 +81,7 @@ namespace Chatbot
                 switch (searchResult.Id.Kind)
                 {
                     case "youtube#video":
-                        videos.Add(String.Format("{0} ({1})", searchResult.Snippet.Title, searchResult.Id.VideoId));
+                        videos.Add($"{searchResult.Snippet.Title} ({searchResult.Id.VideoId})");
                         break;
                 }
             }
@@ -120,7 +121,7 @@ namespace Chatbot
         /// <returns></returns>
         public static async Task GetDef(string s)
         {
-            var body = "";
+            string body;
             var client = new HttpClient();
             var request = new HttpRequestMessage
             {
@@ -139,15 +140,15 @@ namespace Chatbot
                 body = await response0.Content.ReadAsStringAsync();
             }
 
-            APIObjects.Definitions.defs.Clear();
+            Definitions.Defs.Clear();
             /*
             HttpResponseMessage response = await client.GetAsync(requestUri);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
             */
-            APIObjects.Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<APIObjects.Definitions.Root>(body);
+            Definitions.Root defDeserializedClass = JsonSerializer.Deserialize<Definitions.Root>(body);
 
-            APIObjects.Definitions.defs.Add(defDeserializedClass);
+            Definitions.Defs.Add(defDeserializedClass);
         }
 
 

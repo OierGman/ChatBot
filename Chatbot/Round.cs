@@ -1,8 +1,10 @@
-﻿namespace Chatbot
+﻿using System.Runtime.InteropServices;
+
+namespace Chatbot
 {
     internal class Round : TextBox
     {
-        [System.Runtime.InteropServices.DllImport("gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        [DllImport("gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
         private static extern IntPtr CreateRoundRectRgn
         (
             int nLeftRect,
@@ -15,7 +17,7 @@
         protected override void OnCreateControl()
         {
             base.OnCreateControl();
-            this.Region = System.Drawing.Region.FromHrgn(CreateRoundRectRgn(2, 3, this.Width, this.Height, 15, 15));
+            Region = Region.FromHrgn(CreateRoundRectRgn(2, 3, Width, Height, 15, 15));
         }
     }
 }

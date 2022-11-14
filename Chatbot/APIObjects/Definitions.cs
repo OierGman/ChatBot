@@ -4,7 +4,7 @@ namespace Chatbot.APIObjects
 {
     internal class Definitions
     {
-        public static List<Definitions.Root> defs = new List<Definitions.Root>();
+        public static List<Root> Defs = new List<Root>();
 
         // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
         public class Definition

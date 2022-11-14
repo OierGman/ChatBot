@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Speech.Synthesis;
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
@@ -23,6 +24,7 @@ namespace Chatbot
         public Form1()
         {
             InitializeComponent();
+            AllocConsole();
             // initialize with welcome chatbot message
             chatLogTable.Controls.Add(new Round
             {
@@ -332,6 +334,40 @@ namespace Chatbot
                 else
                 {
                     _messageBot = MrChat.Chat[0].result;
+                    if (MrChat.Chat[0].result.Length > 100)
+                    {
+                        string i = MrChat.Chat[0].result.Substring(100);
+                        //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
+                        int x = i.IndexOf(' ');
+                        string y = MrChat.Chat[0].result.Substring(0, 100 + x);
+                        string z = MrChat.Chat[0].result.Substring(100 + x);
+                        Console.WriteLine(y);
+                        Console.WriteLine(z);
+                        ChatLogController(new Round
+                        {
+                            ReadOnly = true,
+                            Multiline = true,
+                            Dock = DockStyle.Fill,
+                            BorderStyle = BorderStyle.None,
+                            TextAlign = HorizontalAlignment.Center,
+                            Size = new Size(257, 97),//224,71,
+                            BackColor = Color.LightBlue,
+                            Text = "\r\n" + y
+                        }, 0);
+
+                        ChatLogController(new Round
+                        {
+                            ReadOnly = true,
+                            Multiline = true,
+                            Dock = DockStyle.Fill,
+                            BorderStyle = BorderStyle.None,
+                            TextAlign = HorizontalAlignment.Center,
+                            Size = new Size(257, 97),//224,71,
+                            BackColor = Color.LightBlue,
+                            Text = "\r\n" + z
+                        }, 0);
+                    }
+                    /*
                     ChatLogController(new Round
                     {
                         ReadOnly = true,
@@ -343,6 +379,11 @@ namespace Chatbot
                         BackColor = Color.LightBlue,
                         Text = "\r\n" + MrChat.Chat[0].result
                     }, 0);
+                    Console.WriteLine(MrChat.Chat[0].result.Length);
+                    */
+                    // 103 is max characters of 3 lines
+                    // then generate a method that checks this 
+                    // and split in two different chat boxes
                 }
             }
             if (_talkingBot)
@@ -517,5 +558,8 @@ namespace Chatbot
             }
             messageButton_Click(this, e);
         }
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool AllocConsole();
     }
 }

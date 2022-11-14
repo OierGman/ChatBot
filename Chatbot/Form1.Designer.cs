@@ -38,8 +38,6 @@ namespace Chatbot
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.round1 = new Chatbot.Round();
-            this.chatLogTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // userInputBox
@@ -67,11 +65,11 @@ namespace Chatbot
             // 
             // chatLogTable
             // 
+            this.chatLogTable.AutoSize = true;
             this.chatLogTable.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.chatLogTable.ColumnCount = 2;
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.chatLogTable.Controls.Add(this.round1, 1, 0);
             this.chatLogTable.Location = new System.Drawing.Point(11, 37);
             this.chatLogTable.Name = "chatLogTable";
             this.chatLogTable.RowCount = 4;
@@ -123,16 +121,6 @@ namespace Chatbot
             this.panel1.Size = new System.Drawing.Size(562, 617);
             this.panel1.TabIndex = 7;
             // 
-            // round1
-            // 
-            this.round1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.round1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.round1.Location = new System.Drawing.Point(265, 3);
-            this.round1.Multiline = true;
-            this.round1.Name = "round1";
-            this.round1.Size = new System.Drawing.Size(257, 97);
-            this.round1.TabIndex = 0;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -156,8 +144,6 @@ namespace Chatbot
             this.MinimumSize = new System.Drawing.Size(580, 664);
             this.Name = "Form1";
             this.Text = "Chatty";
-            this.chatLogTable.ResumeLayout(false);
-            this.chatLogTable.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,6 +158,5 @@ namespace Chatbot
         private Label label1;
         private Label label2;
         private Panel panel1;
-        private Round round1;
     }
 }

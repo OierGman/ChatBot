@@ -29,7 +29,7 @@ namespace Chatbot
                 ReadOnly = true,
                 Multiline = true,
                 BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.LimeGreen,
+                BackColor = Color.LightBlue,
                 TextAlign = HorizontalAlignment.Center,
                 Dock = DockStyle.Fill,
                 Text = "\r\n" + "Hello! I'm Chatty, your personal assistant! How can I help?"
@@ -72,7 +72,7 @@ namespace Chatbot
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 TextAlign = HorizontalAlignment.Center,
-                Size = new Size(224, 71),
+                Size = new Size(257, 97),
                 BackColor = Color.LimeGreen,
                 Text = "\r\n" + userInputBox.Text
             }, 1);
@@ -194,8 +194,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + _taskHolder
                 }, 0);
                 userInputBox.Text = "";
@@ -216,8 +216,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + "What would you like to call this task?"
                 }, 0);
                 userInputBox.Text = "";
@@ -232,7 +232,7 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
+                    Size = new Size(257, 97),
                     BackColor = Color.LimeGreen,
                     Text = "\r\n" + userInputBox.Text
                 }, 1);
@@ -244,8 +244,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + "When is this task due?"
                 }, 0);
 
@@ -265,7 +265,7 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
+                    Size = new Size(257, 97),
                     BackColor = Color.LimeGreen,
                     Text = "\r\n" + userInputBox.Text
                 }, 1);
@@ -278,8 +278,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + "Task Added successfully!"
                 }, 0);
                 _taskCheck = false;
@@ -307,8 +307,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),//224,71,
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),//224,71,
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + response
                 }, 0);
             }
@@ -324,8 +324,8 @@ namespace Chatbot
                         Dock = DockStyle.Fill,
                         BorderStyle = BorderStyle.None,
                         TextAlign = HorizontalAlignment.Center,
-                        Size = new Size(224, 71),//224,71,
-                        BackColor = Color.LimeGreen,
+                        Size = new Size(257, 97),//224,71,
+                        BackColor = Color.LightBlue,
                         Text = "\r\n" + "Sorry, I do not understand, could you ask me differently?"
                     }, 0);
                 }
@@ -339,8 +339,8 @@ namespace Chatbot
                         Dock = DockStyle.Fill,
                         BorderStyle = BorderStyle.None,
                         TextAlign = HorizontalAlignment.Center,
-                        Size = new Size(224, 71),//224,71,
-                        BackColor = Color.LimeGreen,
+                        Size = new Size(257, 97),//224,71,
+                        BackColor = Color.LightBlue,
                         Text = "\r\n" + MrChat.Chat[0].result
                     }, 0);
                 }

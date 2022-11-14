@@ -38,27 +38,28 @@ namespace Chatbot
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.round1 = new Chatbot.Round();
+            this.chatLogTable.SuspendLayout();
             this.SuspendLayout();
             // 
             // userInputBox
             // 
             this.userInputBox.BackColor = System.Drawing.SystemColors.ControlLight;
             this.userInputBox.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.userInputBox.Location = new System.Drawing.Point(10, 342);
-            this.userInputBox.Margin = new System.Windows.Forms.Padding(2, 3, 3, 2);
+            this.userInputBox.Location = new System.Drawing.Point(11, 456);
+            this.userInputBox.Margin = new System.Windows.Forms.Padding(2, 4, 3, 3);
             this.userInputBox.Multiline = true;
             this.userInputBox.Name = "userInputBox";
             this.userInputBox.PlaceholderText = "Say Something";
-            this.userInputBox.Size = new System.Drawing.Size(280, 100);
+            this.userInputBox.Size = new System.Drawing.Size(319, 132);
             this.userInputBox.TabIndex = 1;
             this.userInputBox.Text = "hello";
             // 
             // messageButton
             // 
-            this.messageButton.Location = new System.Drawing.Point(383, 342);
-            this.messageButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.messageButton.Location = new System.Drawing.Point(438, 456);
             this.messageButton.Name = "messageButton";
-            this.messageButton.Size = new System.Drawing.Size(87, 99);
+            this.messageButton.Size = new System.Drawing.Size(99, 132);
             this.messageButton.TabIndex = 2;
             this.messageButton.Text = "Send Message";
             this.messageButton.UseVisualStyleBackColor = true;
@@ -66,27 +67,26 @@ namespace Chatbot
             // 
             // chatLogTable
             // 
-            this.chatLogTable.BackColor = System.Drawing.Color.LightBlue;
+            this.chatLogTable.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.chatLogTable.ColumnCount = 2;
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.chatLogTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.chatLogTable.Location = new System.Drawing.Point(10, 28);
-            this.chatLogTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chatLogTable.Controls.Add(this.round1, 1, 0);
+            this.chatLogTable.Location = new System.Drawing.Point(11, 37);
             this.chatLogTable.Name = "chatLogTable";
             this.chatLogTable.RowCount = 4;
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.chatLogTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.chatLogTable.Size = new System.Drawing.Size(459, 310);
+            this.chatLogTable.Size = new System.Drawing.Size(525, 413);
             this.chatLogTable.TabIndex = 3;
             // 
             // btnRecordVoice
             // 
-            this.btnRecordVoice.Location = new System.Drawing.Point(296, 342);
-            this.btnRecordVoice.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnRecordVoice.Location = new System.Drawing.Point(338, 456);
             this.btnRecordVoice.Name = "btnRecordVoice";
-            this.btnRecordVoice.Size = new System.Drawing.Size(82, 99);
+            this.btnRecordVoice.Size = new System.Drawing.Size(94, 132);
             this.btnRecordVoice.TabIndex = 4;
             this.btnRecordVoice.Text = "Voice";
             this.btnRecordVoice.UseVisualStyleBackColor = true;
@@ -97,9 +97,9 @@ namespace Chatbot
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.LightGray;
-            this.label1.Location = new System.Drawing.Point(10, 7);
+            this.label1.Location = new System.Drawing.Point(11, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 15);
+            this.label1.Size = new System.Drawing.Size(73, 20);
             this.label1.TabIndex = 5;
             this.label1.Text = "Mr Chatty";
             // 
@@ -107,9 +107,9 @@ namespace Chatbot
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.LightGray;
-            this.label2.Location = new System.Drawing.Point(441, 7);
+            this.label2.Location = new System.Drawing.Point(504, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 15);
+            this.label2.Size = new System.Drawing.Size(33, 20);
             this.label2.TabIndex = 6;
             this.label2.Text = "You";
             // 
@@ -118,19 +118,30 @@ namespace Chatbot
             this.panel1.BackColor = System.Drawing.Color.LightGray;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(494, 471);
+            this.panel1.Size = new System.Drawing.Size(562, 617);
             this.panel1.TabIndex = 7;
+            // 
+            // round1
+            // 
+            this.round1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.round1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.round1.Location = new System.Drawing.Point(265, 3);
+            this.round1.Multiline = true;
+            this.round1.Name = "round1";
+            this.round1.Size = new System.Drawing.Size(257, 97);
+            this.round1.TabIndex = 0;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(494, 471);
+            this.ClientSize = new System.Drawing.Size(562, 617);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnRecordVoice);
@@ -140,10 +151,13 @@ namespace Chatbot
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(510, 510);
-            this.MinimumSize = new System.Drawing.Size(510, 510);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximumSize = new System.Drawing.Size(580, 664);
+            this.MinimumSize = new System.Drawing.Size(580, 664);
             this.Name = "Form1";
             this.Text = "Chatty";
+            this.chatLogTable.ResumeLayout(false);
+            this.chatLogTable.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,5 +172,6 @@ namespace Chatbot
         private Label label1;
         private Label label2;
         private Panel panel1;
+        private Round round1;
     }
 }

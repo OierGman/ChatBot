@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Speech.Synthesis;
 using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
@@ -23,13 +24,14 @@ namespace Chatbot
         public Form1()
         {
             InitializeComponent();
+            AllocConsole();
             // initialize with welcome chatbot message
             chatLogTable.Controls.Add(new Round
             {
                 ReadOnly = true,
                 Multiline = true,
                 BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.LimeGreen,
+                BackColor = Color.LightBlue,
                 TextAlign = HorizontalAlignment.Center,
                 Dock = DockStyle.Fill,
                 Text = "\r\n" + "Hello! I'm Chatty, your personal assistant! How can I help?"
@@ -72,7 +74,7 @@ namespace Chatbot
                 Dock = DockStyle.Fill,
                 BorderStyle = BorderStyle.None,
                 TextAlign = HorizontalAlignment.Center,
-                Size = new Size(224, 71),
+                Size = new Size(257, 97),
                 BackColor = Color.LimeGreen,
                 Text = "\r\n" + userInputBox.Text
             }, 1);
@@ -194,8 +196,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + _taskHolder
                 }, 0);
                 userInputBox.Text = "";
@@ -216,8 +218,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + "What would you like to call this task?"
                 }, 0);
                 userInputBox.Text = "";
@@ -232,7 +234,7 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
+                    Size = new Size(257, 97),
                     BackColor = Color.LimeGreen,
                     Text = "\r\n" + userInputBox.Text
                 }, 1);
@@ -244,8 +246,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + "When is this task due?"
                 }, 0);
 
@@ -265,7 +267,7 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
+                    Size = new Size(257, 97),
                     BackColor = Color.LimeGreen,
                     Text = "\r\n" + userInputBox.Text
                 }, 1);
@@ -278,8 +280,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + "Task Added successfully!"
                 }, 0);
                 _taskCheck = false;
@@ -307,8 +309,8 @@ namespace Chatbot
                     Dock = DockStyle.Fill,
                     BorderStyle = BorderStyle.None,
                     TextAlign = HorizontalAlignment.Center,
-                    Size = new Size(224, 71),//224,71,
-                    BackColor = Color.LimeGreen,
+                    Size = new Size(257, 97),//224,71,
+                    BackColor = Color.LightBlue,
                     Text = "\r\n" + response
                 }, 0);
             }
@@ -316,7 +318,7 @@ namespace Chatbot
             {
                 if (MrChat.Chat[0].result == null)
                 {
-                    // _messageBot = "Sorry, I do not understand, could you ask me differently?";
+                    _messageBot = "Sorry, I do not understand, could you ask me differently?";
                     ChatLogController(new Round
                     {
                         ReadOnly = true,
@@ -324,14 +326,48 @@ namespace Chatbot
                         Dock = DockStyle.Fill,
                         BorderStyle = BorderStyle.None,
                         TextAlign = HorizontalAlignment.Center,
-                        Size = new Size(224, 71),//224,71,
-                        BackColor = Color.LimeGreen,
+                        Size = new Size(257, 97),//224,71,
+                        BackColor = Color.LightBlue,
                         Text = "\r\n" + "Sorry, I do not understand, could you ask me differently?"
                     }, 0);
                 }
                 else
                 {
                     _messageBot = MrChat.Chat[0].result;
+                    if (MrChat.Chat[0].result.Length > 100)
+                    {
+                        string i = MrChat.Chat[0].result.Substring(95);
+                        //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
+                        int x = i.IndexOf(' ');
+                        string y = MrChat.Chat[0].result.Substring(0, 95 + x);
+                        string z = MrChat.Chat[0].result.Substring(95 + x);
+                        Console.WriteLine(y);
+                        Console.WriteLine(z);
+                        ChatLogController(new Round
+                        {
+                            ReadOnly = true,
+                            Multiline = true,
+                            Dock = DockStyle.Fill,
+                            BorderStyle = BorderStyle.None,
+                            TextAlign = HorizontalAlignment.Center,
+                            Size = new Size(257, 97),//224,71,
+                            BackColor = Color.LightBlue,
+                            Text = "\r\n" + y
+                        }, 0);
+
+                        ChatLogController(new Round
+                        {
+                            ReadOnly = true,
+                            Multiline = true,
+                            Dock = DockStyle.Fill,
+                            BorderStyle = BorderStyle.None,
+                            TextAlign = HorizontalAlignment.Center,
+                            Size = new Size(257, 97),//224,71,
+                            BackColor = Color.LightBlue,
+                            Text = "\r\n" + z
+                        }, 0);
+                    }
+                    /*
                     ChatLogController(new Round
                     {
                         ReadOnly = true,
@@ -339,10 +375,15 @@ namespace Chatbot
                         Dock = DockStyle.Fill,
                         BorderStyle = BorderStyle.None,
                         TextAlign = HorizontalAlignment.Center,
-                        Size = new Size(224, 71),//224,71,
-                        BackColor = Color.LimeGreen,
+                        Size = new Size(257, 97),//224,71,
+                        BackColor = Color.LightBlue,
                         Text = "\r\n" + MrChat.Chat[0].result
                     }, 0);
+                    Console.WriteLine(MrChat.Chat[0].result.Length);
+                    */
+                    // 103 is max characters of 3 lines
+                    // then generate a method that checks this 
+                    // and split in two different chat boxes
                 }
             }
             if (_talkingBot)
@@ -517,5 +558,8 @@ namespace Chatbot
             }
             messageButton_Click(this, e);
         }
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool AllocConsole();
     }
 }

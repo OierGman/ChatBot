@@ -44,24 +44,28 @@ namespace Chatbot
             _timer.Stop();
             AlarmRunningLabel.Text = "Alarm not set.";
         }
-
+        // timer callback
         private void timer1_Tick(object sender, EventArgs e)
         {
-            _seconds = Convert.ToInt32(TimerTextBox.Text);
-            TimerTextBox.Enabled = false;
             timer1.Start();
-        }
-
-        private void TimerButton_Click(object sender, EventArgs e)
-        {
-            TimerCountLabel.Text = _seconds--.ToString();
-
+            _seconds--;
+            TimerCountLabel.Text = _seconds.ToString();
+            TimerTextBox.Enabled = false;
+            TimerButton.Enabled = false;
             if (_seconds <= 0)
             {
                 timer1.Stop();
                 TimerTextBox.Enabled = true;
-                MessageBox.Show("Ring Ring Ring");
+                TimerButton.Enabled = true;
+                MessageBox.Show("BEEP BEEP");
             }
+        }
+        // timer on click starts timer
+        private void TimerButton_Click(object sender, EventArgs e)
+        {
+            _seconds = int.Parse(TimerTextBox.Text);
+            TimerCountLabel.Text = _seconds.ToString();
+            timer1_Tick(null, null);
         }
     }
 }

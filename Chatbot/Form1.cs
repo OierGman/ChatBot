@@ -278,7 +278,7 @@ namespace Chatbot
                 userInputBox.Text = "";
 
             }
-            else if (_count == 2)
+            else
             {
                 _task = _task + ", " + userInputBox.Text;
                 _taskList.Add(_task);

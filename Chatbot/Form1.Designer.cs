@@ -52,6 +52,7 @@ namespace Chatbot
             this.userInputBox.Size = new System.Drawing.Size(319, 132);
             this.userInputBox.TabIndex = 1;
             this.userInputBox.Text = "hello";
+            this.userInputBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.userInputBox_KeyUp);
             // 
             // messageButton
             // 

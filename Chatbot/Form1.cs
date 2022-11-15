@@ -1,44 +1,53 @@
+using Chatbot.APIObjects;
 using Google.Cloud.Speech.V1;
 using Google.Type;
 using NAudio.Wave;
-using static Google.Rpc.Context.AttributeContext.Types;
-using static System.Net.Mime.MediaTypeNames;
+
+using System.Speech.Synthesis;
+
 
 namespace Chatbot
 {
     public partial class Form1 : Form
     {
-        private BufferedWaveProvider bwp;
+
         String TaskHolder;
         List<String> TaskList = new List<String>();
-        WaveIn waveIn;
-        WaveOut waveOut;
-        WaveFileWriter writer;
-        WaveFileReader reader;
-        string output = "audio.raw";
         bool TaskCheck = false;
         int count = 0;
         String Task;
+        private BufferedWaveProvider _bwp;
+        public WaveIn In { get; private set; }
+        public WaveOut Out { get; private set; }
+        private WaveFileWriter _writer;
+        string _messageBot;
+        readonly string _output = "audio.raw";
+        bool _talkingBot = false;
+
         public Form1()
         {
-         
             InitializeComponent();
             // initialize with welcome chatbot message
-            chatLogTable.Controls.Add(new TextBox()
+            chatLogTable.Controls.Add(new Round()
             {
                 ReadOnly = true,
-                Dock = DockStyle.Fill,
                 Multiline = true,
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.LimeGreen,
+                TextAlign = HorizontalAlignment.Center,
+                Dock = DockStyle.Fill,
                 Text = "Hello! I'm Chatty, your personal assistant! How can I help?"
-            }, 0, 3);
-            waveOut = new WaveOut();
-            waveIn = new WaveIn();
+                }, 0, 3) ; 
 
-            waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
-            bwp = new BufferedWaveProvider(waveIn.WaveFormat);
-            bwp.DiscardOnBufferOverflow = true;
+            Out = new WaveOut();
+            In = new WaveIn();
+
+            In.DataAvailable += waveIn_DataAvailable;
+            In.WaveFormat = new WaveFormat(16000, 1);
+            _bwp = new BufferedWaveProvider(In.WaveFormat);
+            _bwp.DiscardOnBufferOverflow = true;
         }
+        
         public void Form1_Load(object sender, EventArgs e)
         {
             #region TaskDummyData
@@ -47,41 +56,76 @@ namespace Chatbot
             TaskList.Add("Complete OOP Assignment 1, 10/01/23");
             #endregion
         }
+
         // user message button click event
         public void messageButton_Click(object sender, EventArgs e)
         {
-            if (TaskCheck == false)
-            {
-                TextBox message = new TextBox()
-                {
-                    ReadOnly = true,
-                    Dock = DockStyle.Fill,
-                    Multiline = true,
-                    Text = userInputBox.Text,
-                };
-                userInputBox.Text = "";
-                ChatLogController(message, 1);
-                ChatDecider(message.Text);
-                // ChatBotEngine.BankHolidays();
-                // ChatBotEngine.Joke();
-            }
-            else
+            if (TaskCheck == true)
             {
                 ToDoList();
             }
+            
+            
+            if (userInputBox.Text == "")
+            {
+                return;
+            } 
+            else if (userInputBox.Text == "Say something")
+            {
+                return;
+            }
+          
+            ChatLogController(new Round()
+            {
+                ReadOnly = true,
+                Multiline = true,
+                Dock = DockStyle.Fill,
+                BorderStyle = BorderStyle.None,
+                TextAlign = HorizontalAlignment.Center,
+                Size = new Size(224, 71),
+                BackColor = Color.LimeGreen,
+                Text = userInputBox.Text
+            }, 1);
+
+            ChatDecider(userInputBox.Text);
+            // userInputBox.Text = "";
         }
+        
         /// <summary>
         /// The user input is filtered, and tasks/methods called depending on keywords.
         /// </summary>
         /// <param name="messageText">User input.</param>
         private async void ChatDecider(string messageText)
         {
+
             // convert user input to lower case to remove capitilisation errors 
             messageText = messageText.ToLower();
+
             if (messageText.Contains("play"))
             {
                 string keyWord = messageText.Remove(0, 5);
                 YouTubeAPI(keyWord);
+            } 
+            else if (messageText.Contains("speak to me"))
+            {
+                _talkingBot = true;
+                BotResponse("Ok, I will start speaking to you");
+            }
+            else if (messageText.Contains("stop speaking"))
+            {
+                BotResponse("Ok, I will stop speaking to you");
+                _talkingBot = false;
+            }
+            else if (messageText.Contains("bank holiday"))
+            {
+                await ChatBotEngine.BankHolidays();
+                string str = null;
+                foreach (var eEvent in BankHolidays.bankHolidays)
+                {
+                    str += eEvent.date + " " + eEvent.title + "\r\n";    //store the holiday events in the string
+                }
+                BotResponse("Here are all the confirmed bank holidays I know of");
+                MessageBox.Show(str);
             }
             // search user input for to do list key words in order to add TaskCheck 
             else if (messageText.Contains("task"))
@@ -96,15 +140,30 @@ namespace Chatbot
             }
             else
             {
-                await ChatBotEngine.MrChat(messageText);
-                BotResponse(null);
+                if (MrChat.chat.Count == 0)
+                {
+                    await ChatBotEngine.MrChat(messageText);
+                    BotResponse(null);
+                }
+                else
+                {
+                    // try catch
+                    try
+                    {
+                        await ChatBotEngine.Converse(messageText, MrChat.chat[0].conversationID, MrChat.chat[0].host);
+                        BotResponse(null);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
+                }
             }
 
         }
 
         private void ShowToDoList()
         {
-            
             int TaskCount = TaskList.Count;
             for (int i = 0; i < TaskCount; i++)
             {
@@ -177,9 +236,6 @@ namespace Chatbot
                 ChatLogController(BotMessage, 0);
                 TaskCheck = false;
             }
-
-
-
             ++count;
         }
        
@@ -188,24 +244,64 @@ namespace Chatbot
         /// Chatty will respond with a result, depending on which method called it.
         /// </summary>
         /// <param name="response">Response from method call.</param>
-        public async Task BotResponse(string response)
+        public Task BotResponse(string response)
         {
-            TextBox message1 = new TextBox()
-            {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                Multiline = true,
-            };
+            SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
+
             if (response != null)
             {
-                message1.Text = response;
-                ChatLogController(message1, 0);
+                _messageBot = response;
+                ChatLogController(new Round()
+                {
+                    ReadOnly = true,
+                    Multiline = true,
+                    Dock = DockStyle.Fill,
+                    BorderStyle = BorderStyle.None,
+                    TextAlign = HorizontalAlignment.Center,
+                    Size = new Size(224, 71),//224,71,
+                    BackColor = Color.LimeGreen,
+                    Text = response
+                }, 0);
             }
             else
             {
-                message1.Text = APIObjects.MrChat.chat[0].result;
-                ChatLogController(message1, 0);
+                if (MrChat.chat[0].result == null)
+                {
+                    _messageBot = "Sorry, I do not understand, could you ask me differently?";
+                    ChatLogController(new Round()
+                    {
+                        ReadOnly = true,
+                        Multiline = true,
+                        Dock = DockStyle.Fill,
+                        BorderStyle = BorderStyle.None,
+                        TextAlign = HorizontalAlignment.Center,
+                        Size = new Size(224, 71),//224,71,
+                        BackColor = Color.LimeGreen,
+                        Text = "Sorry, I do not understand, could you ask me differently?"
+                    }, 0);
+                }
+                else
+                {
+                    _messageBot = MrChat.chat[0].result;
+                    ChatLogController(new Round()
+                    {
+                        ReadOnly = true,
+                        Multiline = true,
+                        Dock = DockStyle.Fill,
+                        BorderStyle = BorderStyle.None,
+                        TextAlign = HorizontalAlignment.Center,
+                        Size = new Size(224, 71),//224,71,
+                        BackColor = Color.LimeGreen,
+                        Text = MrChat.chat[0].result
+                    }, 0);
+                }
             }
+            if (_talkingBot == true)
+            {
+                speechSynthesis.Speak(_messageBot);
+            }
+            userInputBox.Text = "";
+            return Task.CompletedTask;
         }
         /// <summary>
         /// This method takes a string and parses to the youtube api, returns title of video, as well as opening youtube link via Task.
@@ -228,15 +324,15 @@ namespace Chatbot
         /// </summary>
         /// <param name="message">A message as a Textbox</param>
         /// <param name="i">Index of message.</param>
-        private void ChatLogController(TextBox message, int i)
+        private void ChatLogController(Round message, int i)
         {
-            var botMessageOne = chatLogTable.GetControlFromPosition(0, 3);
-            var botMessageTwo = chatLogTable.GetControlFromPosition(0, 2);
-            var botMessageThree = chatLogTable.GetControlFromPosition(0, 1);
+            var botMessageOne = (Round)chatLogTable.GetControlFromPosition(0, 3);
+            var botMessageTwo = (Round)chatLogTable.GetControlFromPosition(0, 2);
+            var botMessageThree = (Round)chatLogTable.GetControlFromPosition(0, 1);
             chatLogTable.Controls.Remove(chatLogTable.GetControlFromPosition(0, 0));
-            var userMessageOne = chatLogTable.GetControlFromPosition(1, 3);
-            var userMessageTwo = chatLogTable.GetControlFromPosition(1, 2);
-            var userMessageThree = chatLogTable.GetControlFromPosition(1, 1);
+            var userMessageOne = (Round)chatLogTable.GetControlFromPosition(1, 3);
+            var userMessageTwo = (Round)chatLogTable.GetControlFromPosition(1, 2);
+            var userMessageThree = (Round)chatLogTable.GetControlFromPosition(1, 1);
             chatLogTable.Controls.Remove(chatLogTable.GetControlFromPosition(1, 0));
             // no 1 2, 0 3, 0 2, 0 0
             chatLogTable.Controls.Clear();
@@ -248,7 +344,6 @@ namespace Chatbot
             {
 
             }
-
             try
             {
                 chatLogTable.Controls.Add(botMessageTwo, 0, 1);
@@ -273,7 +368,6 @@ namespace Chatbot
             {
 
             }
-
             try
             {
                 chatLogTable.Controls.Add(userMessageTwo, 1, 1);
@@ -290,12 +384,12 @@ namespace Chatbot
             {
 
             }
-
             chatLogTable.Controls.Add(message, i, 3);
         }
+
         void waveIn_DataAvailable(object sender, WaveInEventArgs e)
         {
-            bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
+            _bwp.AddSamples(e.Buffer, 0, e.BytesRecorded);
 
         }
         /// <summary>
@@ -303,46 +397,45 @@ namespace Chatbot
         /// </summary>
         private void btnRecordVoice_MouseDown(object sender, MouseEventArgs e)
         {
-            if (NAudio.Wave.WaveIn.DeviceCount < 1)
+            if (WaveIn.DeviceCount < 1)
             {
                 Console.WriteLine("No microphone.");
                 return;
             }
-            waveIn = new WaveIn();
-            waveOut = new WaveOut();
-            waveIn = new WaveIn();
-            waveIn.DataAvailable += new EventHandler<WaveInEventArgs>(waveIn_DataAvailable);
-            waveIn.WaveFormat = new NAudio.Wave.WaveFormat(16000, 1);
-            bwp = new BufferedWaveProvider(waveIn.WaveFormat);
-            bwp.DiscardOnBufferOverflow = true;
-            waveIn.StartRecording();
+            In = new WaveIn();
+            Out = new WaveOut();
+            In.DataAvailable += waveIn_DataAvailable;
+            In.WaveFormat = new WaveFormat(16000, 1);
+            _bwp = new BufferedWaveProvider(In.WaveFormat);
+            _bwp.DiscardOnBufferOverflow = true;
+            In.StartRecording();
         }
         /// <summary>
         /// Sends audio file to Google Cloud Speech-to-Text API for transcription.
         /// </summary>
         private void btnRecordVoice_MouseUp(object sender, MouseEventArgs e)
         {
-            waveIn.StopRecording();
+            In.StopRecording();
 
             if (File.Exists("audio.raw"))
                 File.Delete("audio.raw");
 
-            writer = new WaveFileWriter(output, waveIn.WaveFormat);
+            _writer = new WaveFileWriter(_output, In.WaveFormat);
 
-            byte[] buffer = new byte[bwp.BufferLength];
+            byte[] buffer = new byte[_bwp.BufferLength];
             int offset = 0;
-            int count = bwp.BufferLength;
+            int count = _bwp.BufferLength;
 
-            var read = bwp.Read(buffer, offset, count);
+            var read = _bwp.Read(buffer, offset, count);
             if (count > 0)
             {
-                writer.Write(buffer, offset, read);
+                _writer.Write(buffer, offset, read);
             }
 
-            waveIn.Dispose();
-            waveIn = null;
-            writer.Close();
-            writer = null;
+            In.Dispose();
+            In = null;
+            _writer.Close();
+            _writer = null;
 
             if (File.Exists("audio.raw"))
             {
@@ -375,6 +468,10 @@ namespace Chatbot
             messageButton_Click(this, e);
         }
 
-        
+        private void round1_TextChanged(object sender, EventArgs e)
+        {
+            Round message = new Round();
+        }
+
     }
 }

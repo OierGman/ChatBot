@@ -20,6 +20,7 @@ namespace Chatbot
         string _messageBot;
         private const string _output = "audio.raw";
         bool _talkingBot;
+        SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
 
         public Form1()
         {
@@ -47,7 +48,13 @@ namespace Chatbot
                 DiscardOnBufferOverflow = true
             };
         }
-
+        private void userInputBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                messageButton.PerformClick();
+            }
+        }
         // user message button click event
         public void messageButton_Click(object sender, EventArgs e)
         {
@@ -80,7 +87,7 @@ namespace Chatbot
             }, 1);
 
             ChatDecider(userInputBox.Text);
-            // userInputBox.Text = "";
+            userInputBox.Text = "";
         }
 
         /// <summary>
@@ -136,6 +143,8 @@ namespace Chatbot
                 AlarmTimer x = new AlarmTimer();
                 x.Show();
                 // clear input & return message
+                userInputBox.Text = "";
+                BotResponse("Here is the timer system I have");
             }
             else if (messageText.Contains("bank holiday"))
             {
@@ -223,6 +232,14 @@ namespace Chatbot
                     BackColor = Color.LightBlue,
                     Text = "\r\n" + "What would you like to call this task?"
                 }, 0);
+                
+                _messageBot = "What would you like to call this task?";
+                /*
+                if (_talkingBot)
+                {
+                    speechSynthesis.Speak(_messageBot);
+                }
+                */
                 userInputBox.Text = "";
             }
             else if (_count == 1)
@@ -251,7 +268,13 @@ namespace Chatbot
                     BackColor = Color.LightBlue,
                     Text = "\r\n" + "When is this task due?"
                 }, 0);
-
+                _messageBot = "When is this task due?";
+                /*
+                if (_talkingBot)
+                {
+                    speechSynthesis.Speak(_messageBot);
+                }
+                */
                 userInputBox.Text = "";
 
             }
@@ -285,8 +308,13 @@ namespace Chatbot
                     BackColor = Color.LightBlue,
                     Text = "\r\n" + "Task Added successfully!"
                 }, 0);
+                _messageBot = "Task Added successfully!";
                 _taskCheck = false;
                 userInputBox.Text = "";
+            }
+            if (_talkingBot)
+            {
+                speechSynthesis.Speak(_messageBot);
             }
             ++_count;
         }
@@ -298,8 +326,6 @@ namespace Chatbot
         /// <param name="response">Response from method call.</param>
         public Task? BotResponse(string response)
         {
-            SpeechSynthesizer speechSynthesis = new SpeechSynthesizer();
-
             if (response != null)
             {
                 _messageBot = response;
@@ -335,13 +361,56 @@ namespace Chatbot
                 else
                 {
                     _messageBot = MrChat.Chat[0].result;
-                    if (MrChat.Chat[0].result.Length > 100)
+
+                    if (MrChat.Chat[0].result.Length > 95)
                     {
                         string i = MrChat.Chat[0].result.Substring(95);
-                        //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
                         int x = i.IndexOf(' ');
                         string y = MrChat.Chat[0].result.Substring(0, 95 + x);
                         string z = MrChat.Chat[0].result.Substring(95 + x);
+                        if (i.Length > 95)
+                        {
+                            string j = i.Substring(95);
+                            int k = j.IndexOf(' ');
+                            string l = MrChat.Chat[0].result.Substring(0, 95 + x);
+                            string m = MrChat.Chat[0].result.Substring(95 + x);
+                            string n = MrChat.Chat[0].result.Substring(190 + k);
+
+                            ChatLogController(new Round
+                            {
+                                ReadOnly = true,
+                                Multiline = true,
+                                Dock = DockStyle.Fill,
+                                BorderStyle = BorderStyle.None,
+                                TextAlign = HorizontalAlignment.Center,
+                                Size = new Size(257, 97),//224,71,
+                                BackColor = Color.LightBlue,
+                                Text = "\r\n" + l
+                            }, 0);
+                            ChatLogController(new Round
+                            {
+                                ReadOnly = true,
+                                Multiline = true,
+                                Dock = DockStyle.Fill,
+                                BorderStyle = BorderStyle.None,
+                                TextAlign = HorizontalAlignment.Center,
+                                Size = new Size(257, 97),//224,71,
+                                BackColor = Color.LightBlue,
+                                Text = "\r\n" + m
+                            }, 0);
+                            ChatLogController(new Round
+                            {
+                                ReadOnly = true,
+                                Multiline = true,
+                                Dock = DockStyle.Fill,
+                                BorderStyle = BorderStyle.None,
+                                TextAlign = HorizontalAlignment.Center,
+                                Size = new Size(257, 97),//224,71,
+                                BackColor = Color.LightBlue,
+                                Text = "\r\n" + n
+                            }, 0);
+                        }
+                        //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
                         Console.WriteLine(y);
                         Console.WriteLine(z);
                         ChatLogController(new Round

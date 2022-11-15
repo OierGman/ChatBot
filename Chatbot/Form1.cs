@@ -92,6 +92,7 @@ namespace Chatbot
             else if (messageText.Contains("show") && messageText.Contains("to do"))
             {
                 ShowToDoList();
+
             }
             else
             {

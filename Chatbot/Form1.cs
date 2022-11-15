@@ -370,11 +370,11 @@ namespace Chatbot
                         string z = MrChat.Chat[0].result.Substring(95 + x);
                         if (i.Length > 95)
                         {
-                            string j = i.Substring(95);
+                            string j = z.Substring(95);
                             int k = j.IndexOf(' ');
                             string l = MrChat.Chat[0].result.Substring(0, 95 + x);
-                            string m = MrChat.Chat[0].result.Substring(95 + x);
-                            string n = MrChat.Chat[0].result.Substring(190 + k);
+                            string m = z.Substring(0, 95 + k);
+                            string n = z.Substring(95 + k);
 
                             ChatLogController(new Round
                             {
@@ -410,9 +410,8 @@ namespace Chatbot
                                 Text = "\r\n" + n
                             }, 0);
                         }
-                        //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
-                        Console.WriteLine(y);
-                        Console.WriteLine(z);
+                        else
+                        {
                         ChatLogController(new Round
                         {
                             ReadOnly = true,
@@ -436,6 +435,11 @@ namespace Chatbot
                             BackColor = Color.LightBlue,
                             Text = "\r\n" + z
                         }, 0);
+                        }
+                        //string i = MrChat.Chat[0].result.Substring(100, MrChat.Chat[0].result.Length);
+                        Console.WriteLine(y);
+                        Console.WriteLine(z);
+                        
                     }
                     else
                     {

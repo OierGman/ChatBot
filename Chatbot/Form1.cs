@@ -85,8 +85,14 @@ namespace Chatbot
                 BackColor = Color.LimeGreen,
                 Text = "\r\n" + userInputBox.Text
             }, 1);
+            string str = userInputBox.Text;
+            var charsToRemove = new string[] { "#" };
+            foreach (var c in charsToRemove)
+            {
+                str = str.Replace(c, string.Empty);
+            }
 
-            ChatDecider(userInputBox.Text);
+            ChatDecider(str);
             userInputBox.Text = "";
         }
 

@@ -1,7 +1,5 @@
-# assessment-1-3-thecodemonkees
-assessment-1-3-thecodemonkees created by GitHub Classroom
+#List of Features:
 
-List of Features:
 1.	Get list of UK bank holidays
 2.	Open stopwatch/alarm clock
 3.	Create a task/personal reminder
@@ -10,11 +8,13 @@ List of Features:
 6.	User audio to text
 7.	Conversational chat bot
 8.	Play music from YouTube 
-How to access with examples (User message)
+
+#How to access with examples (User message)
+
 1)	“tell me bank holiday”, “get all UK bank holiday”, “bank holiday”
 2)	“show timer”, “timer”
 3)	“new task”, “create task”, “task”
-a)	“show to do list”, “show my to do tasks”, “show to do”
+  a)	“show to do list”, “show my to do tasks”, “show to do”
 4)	“tell me word of the day”, “word day”
 5)	“speak to me”
 a)	“stop speaking”
